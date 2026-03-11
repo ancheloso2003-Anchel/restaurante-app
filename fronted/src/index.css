@@ -1,0 +1,322 @@
+/* --- DESIGN SYSTEM & VARIABLES --- */
+:root {
+  font-family: 'Inter', system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+
+  color-scheme: dark;
+  color: #e2e8f0;
+  background-color: #020617; /* Slate 950: Main Background */
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  /* Theme Accents (Midnight Emerald) */
+  --primary: #10b981;        /* Emerald 500 */
+  --primary-hover: #059669;  /* Emerald 600 */
+  --secondary: #3b82f6;      /* Blue 500 */
+  --bg-card: rgba(15, 23, 42, 0.6);   /* Frosted Navy */
+  --border-glass: rgba(16, 185, 129, 0.1);
+  --accent-glow: rgba(16, 185, 129, 0.2);
+}
+
+/* --- GLOBAL LAYOUT --- */
+body {
+  margin: 0;
+  display: flex;
+  place-items: center;
+  min-width: 320px;
+  min-height: 100vh;
+  /* Dual radial gradient for atmospheric lighting */
+  background: radial-gradient(circle at top right, #064e3b, #020617 60%),
+              radial-gradient(circle at bottom left, #1e1b4b, #020617 60%);
+  background-attachment: fixed;
+}
+
+#root {
+  width: 100%;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
+}
+
+/* --- TYPOGRAPHY & LINKS --- */
+a {
+  font-weight: 600;
+  color: var(--primary);
+  text-decoration: inherit;
+  transition: all 0.3s ease;
+}
+a:hover {
+  color: #34d399;
+  text-shadow: 0 0 15px var(--accent-glow);
+}
+
+h1 {
+  font-size: 4rem;
+  line-height: 1;
+  background: linear-gradient(to bottom right, #fff, #10b981);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 2.5rem;
+  font-weight: 900;
+  letter-spacing: -3px;
+}
+
+/* --- COMMON COMPONENTS --- */
+
+/* Frosted Glass Card Effect */
+.glass-card {
+  background: var(--bg-card);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid var(--border-glass);
+  border-radius: 1.5rem;
+  padding: 2rem;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); /* Bouncy hover */
+  box-shadow: 0 20px 50px -15px rgba(0, 0, 0, 0.7);
+}
+
+.glass-card:hover {
+  transform: translateY(-10px) scale(1.02);
+  border-color: rgba(16, 185, 129, 0.4);
+  box-shadow: 0 30px 60px -20px rgba(16, 185, 129, 0.2);
+}
+
+/* Modern Rounded Buttons */
+button {
+  border-radius: 12px;
+  border: 1px solid rgba(16, 185, 129, 0.2);
+  padding: 0.8em 1.6em;
+  font-size: 1em;
+  font-weight: 600;
+  font-family: inherit;
+  background-color: var(--primary);
+  color: #020617;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 20px rgba(16, 185, 129, 0.3);
+}
+
+button:hover {
+  background-color: var(--primary-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 30px rgba(16, 185, 129, 0.4);
+}
+
+/* Base Grid Layout */
+.grid-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 2.5rem;
+  padding: 2rem 1rem;
+}
+
+/* --- NAVIGATION NAVIGATION --- */
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 72px;
+  background: rgba(2, 6, 23, 0.8); /* Semi-transparent navbar */
+  backdrop-filter: blur(15px);
+  border-bottom: 1px solid var(--border-glass);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 3rem;
+  z-index: 1000;
+}
+
+.nav-links {
+  display: flex;
+  gap: 2.5rem;
+}
+
+.nav-link {
+  color: #94a3b8;
+  font-weight: 600;
+  font-size: 0.95rem;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.nav-link.active, .nav-link :hover {
+  color: var(--primary);
+}
+
+/* Active Link Dot Indicator */
+.nav-link.active::after {
+  content: '';
+  position: absolute;
+  bottom: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 4px;
+  height: 4px;
+  background: var(--primary);
+  border-radius: 50%;
+  box-shadow: 0 0 10px var(--primary);
+}
+
+.main-content {
+  margin-top: 100px;
+  padding-bottom: 5rem;
+}
+
+/* --- SPECIFIC MODULE STYLES --- */
+
+.dish-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem !important;
+}
+
+/* Gradient Price Tag */
+.dish-price {
+  font-family: 'Inter', sans-serif;
+  font-weight: 800;
+  background: linear-gradient(to right, #10b981, #3b82f6);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-size: 1.4rem;
+}
+
+/* Modern Input Fields */
+input, select, textarea {
+  background: rgba(15, 23, 42, 0.4);
+  border: 1px solid var(--border-glass);
+  border-radius: 10px;
+  padding: 1rem;
+  color: white;
+  width: 100%;
+  margin-bottom: 1.5rem;
+  font-family: inherit;
+  transition: border-color 0.3s ease;
+}
+
+input:focus {
+  outline: none;
+  border-color: var(--primary);
+}
+
+/* Premium Carousel UI */
+.carousel-container {
+  position: relative;
+  width: 100%;
+  height: 600px;
+  overflow: hidden;
+  border-radius: 2.5rem;
+  margin-bottom: 5rem;
+  border: 1px solid var(--border-glass);
+  box-shadow: 0 40px 100px -20px rgba(0, 0, 0, 0.8);
+}
+
+.carousel-slide {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  transition: all 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  align-items: flex-end;
+  transform: scale(1.05);
+}
+
+.carousel-slide.active {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.carousel-image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: brightness(0.4) saturate(1.2);
+}
+
+.carousel-content {
+  position: relative;
+  padding: 5rem;
+  text-align: left;
+  z-index: 10;
+  width: 100%;
+  background: linear-gradient(to top, rgba(2, 6, 23, 0.9), transparent);
+}
+
+.carousel-content h2 {
+  font-size: 4.5rem;
+  margin-bottom: 1rem;
+  font-weight: 900;
+  letter-spacing: -2px;
+  line-height: 1;
+}
+
+.carousel-content p {
+  font-size: 1.4rem;
+  color: #94a3b8;
+  max-width: 700px;
+  line-height: 1.6;
+}
+
+.carousel-dots {
+  position: absolute;
+  bottom: 3rem;
+  right: 4rem;
+  display: flex;
+  gap: 1rem;
+  z-index: 20;
+}
+
+.carousel-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.1);
+  cursor: pointer;
+  transition: all 0.4s ease;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.carousel-dot.active {
+  background: var(--primary);
+  width: 40px;
+  border-radius: 6px;
+  box-shadow: 0 0 20px var(--primary);
+}
+
+/* Atmospheric Pulse Loader */
+.loading {
+  font-size: 1.5rem;
+  color: var(--primary);
+  margin: 4rem 0;
+  font-weight: 700;
+  letter-spacing: 5px;
+  text-transform: uppercase;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 0.4; filter: blur(2px); }
+  50% { opacity: 1; filter: blur(0); }
+}
+
+/* Responsiveness Adjustments */
+@media (max-width: 768px) {
+  h1 { font-size: 2.5rem; }
+  .carousel-container { height: 450px; }
+  .carousel-content { padding: 2rem; }
+  .carousel-content h2 { font-size: 2.5rem; }
+}

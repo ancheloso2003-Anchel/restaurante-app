@@ -1,0 +1,242 @@
+const express = require('express')
+const cors = require('cors')
+const mysql = require('mysql2')
+require('dotenv').config()
+
+const app = express()
+app.use(cors())
+const port = 3000
+let db
+
+// Function to establish a connection with retries
+function connectWithRetry() {
+  db = mysql.createConnection({
+    host: process.env.DB_HOST,
+    user: process.env.DB_USER,
+    password: process.env.DB_PASSWORD,
+    database: process.env.DB_NAME,
+  })
+
+  // Attempt to connect
+  db.connect((err) => {
+    if (err) {
+      console.error('Error connecting to MySQL:', err)
+      // Retry after 5 seconds
+      console.log('Retrying in 5 seconds...')
+      setTimeout(connectWithRetry, 5000)
+    } else {
+      console.log('Connected to MySQL database')
+    }
+  })
+}
+
+// Start the connection with retries
+connectWithRetry()
+
+// Define your endpoints
+
+// Get all categories
+app.get('/categories', (req, res) => {
+  db.query('SELECT * FROM categorias', (err, results) => {
+    if (err) {
+      console.error('Error executing query:', err)
+      res.status(500).json({ error: 'Internal Server Error' })
+    } else {
+      res.json(results)
+    }
+  })
+})
+
+// Get all restaurants
+app.get('/restaurants', (req, res) => {
+  db.query('SELECT * FROM restaurantes', (err, results) => {
+    if (err) {
+      console.error('Error executing query:', err)
+      res.status(500).json({ error: 'Internal Server Error' })
+    } else {
+      res.json(results)
+    }
+  })
+})
+
+// Get all dishes
+app.get('/dishes', (req, res) => {
+  db.query('SELECT * FROM platos', (err, results) => {
+    if (err) {
+      console.error('Error executing query:', err)
+      res.status(500).json({ error: 'Internal Server Error' })
+    } else {
+      res.json(results)
+    }
+  })
+})
+
+// Get all customers
+app.get('/customers', (req, res) => {
+  db.query('SELECT * FROM clientes', (err, results) => {
+    if (err) {
+      console.error('Error executing query:', err)
+      res.status(500).json({ error: 'Internal Server Error' })
+    } else {
+      res.json(results)
+    }
+  })
+})
+
+// Get all orders
+app.get('/orders', (req, res) => {
+  const query = `
+    SELECT p.*, c.nombre, c.apellido1, r.restaurante 
+    FROM pedidos p
+    JOIN clientes c ON p.clienteID = c.clienteID
+    JOIN restaurantes r ON p.restauranteID = r.restauranteID
+    ORDER BY p.fecha DESC
+  `;
+  db.query(query, (err, results) => {
+    if (err) {
+      console.error('Error executing query:', err)
+      res.status(500).json({ error: 'Internal Server Error' })
+    } else {
+      res.json(results)
+    }
+  })
+})
+
+// Get all dishes for a specific order
+app.get('/order/:orderId/dishes', (req, res) => {
+  const orderId = req.params.orderId
+  db.query(
+    'SELECT pl.platoID, pl.plato, pl.descripcion, pl.precio, pp.cantidad FROM platospedidos pp JOIN platos pl ON pp.platoID = pl.platoID WHERE pp.pedidoID = ?',
+    [orderId],
+    (err, results) => {
+      if (err) {
+        console.error('Error executing query:', err)
+        res.status(500).json({ error: 'Internal Server Error' })
+      } else {
+        res.json(results)
+      }
+    }
+  )
+})
+
+// --- RESTAURANTS CRUD ---
+
+// Create restaurant
+app.post('/restaurants', express.json(), (req, res) => {
+  const { restaurante, barrio } = req.body
+  db.query(
+    'INSERT INTO restaurantes (restaurante, barrio) VALUES (?, ?)',
+    [restaurante, barrio],
+    (err, results) => {
+      if (err) {
+        console.error('Error executing query:', err)
+        res.status(500).json({ error: 'Internal Server Error' })
+      } else {
+        res.status(201).json({ restauranteID: results.insertId, restaurante, barrio })
+      }
+    }
+  )
+})
+
+// Update restaurant
+app.put('/restaurants/:id', express.json(), (req, res) => {
+  const { id } = req.params
+  const { restaurante, barrio } = req.body
+  db.query(
+    'UPDATE restaurantes SET restaurante = ?, barrio = ? WHERE restauranteID = ?',
+    [restaurante, barrio, id],
+    (err, results) => {
+      if (err) {
+        console.error('Error executing query:', err)
+        res.status(500).json({ error: 'Internal Server Error' })
+      } else {
+        res.json({ message: 'Restaurant updated successfully' })
+      }
+    }
+  )
+})
+
+// Delete restaurant
+app.delete('/restaurants/:id', (req, res) => {
+  const { id } = req.params
+  db.query('DELETE FROM restaurantes WHERE restauranteID = ?', [id], (err, results) => {
+    if (err) {
+      console.error('Error executing query:', err)
+      res.status(500).json({ error: 'Internal Server Error' })
+    } else {
+      res.json({ message: 'Restaurant deleted successfully' })
+    }
+  })
+})
+
+// --- DISHES CRUD ---
+
+// Add dish
+app.post('/dishes', express.json(), (req, res) => {
+  const { plato, descripcion, precio, categoriaID, restauranteID } = req.body
+  db.query(
+    'INSERT INTO platos (plato, descripcion, precio, categoriaID, restauranteID) VALUES (?, ?, ?, ?, ?)',
+    [plato, descripcion, precio, categoriaID, restauranteID],
+    (err, results) => {
+      if (err) {
+        console.error('Error executing query:', err)
+        res.status(500).json({ error: 'Internal Server Error' })
+      } else {
+        res.status(201).json({ platoID: results.insertId, plato, descripcion, precio, categoriaID, restauranteID })
+      }
+    }
+  )
+})
+
+// Update dish
+app.put('/dishes/:id', express.json(), (req, res) => {
+  const { id } = req.params
+  const { plato, descripcion, precio, categoriaID, restauranteID } = req.body
+  db.query(
+    'UPDATE platos SET plato = ?, descripcion = ?, precio = ?, categoriaID = ?, restauranteID = ? WHERE platoID = ?',
+    [plato, descripcion, precio, categoriaID, restauranteID, id],
+    (err, results) => {
+      if (err) {
+        console.error('Error executing query:', err)
+        res.status(500).json({ error: 'Internal Server Error' })
+      } else {
+        res.json({ message: 'Dish updated successfully' })
+      }
+    }
+  )
+})
+
+// Delete dish
+app.delete('/dishes/:id', (req, res) => {
+  const { id } = req.params
+  db.query('DELETE FROM platos WHERE platoID = ?', [id], (err, results) => {
+    if (err) {
+      console.error('Error executing query:', err)
+      res.status(500).json({ error: 'Internal Server Error' })
+    } else {
+      res.json({ message: 'Dish deleted successfully' })
+    }
+  })
+})
+
+// Get dishes for a specific restaurant
+app.get('/restaurants/:id/dishes', (req, res) => {
+  const { id } = req.params
+  db.query(
+    'SELECT p.*, c.categoria FROM platos p JOIN categorias c ON p.categoriaID = c.categoriaID WHERE p.restauranteID = ?',
+    [id],
+    (err, results) => {
+      if (err) {
+        console.error('Error executing query:', err)
+        res.status(500).json({ error: 'Internal Server Error' })
+      } else {
+        res.json(results)
+      }
+    }
+  )
+})
+
+// Start the server
+app.listen(port, () => {
+  console.log(`Server is running on port ${port}`)
+})
