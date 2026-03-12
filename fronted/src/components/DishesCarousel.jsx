@@ -1,3 +1,4 @@
+// Carrusel interactivo que muestra platos destacados con imágenes y descripciones
 import { useState, useEffect } from 'react'
 
 const slides = [
@@ -21,6 +22,7 @@ const slides = [
 const DishesCarousel = () => {
   const [current, setCurrent] = useState(0)
 
+  // Efecto que cambia automáticamente la diapositiva cada 6 segundos
   useEffect(() => {
     const timer = setInterval(() => {
       setCurrent((prev) => (prev === slides.length - 1 ? 0 : prev + 1))
@@ -30,6 +32,7 @@ const DishesCarousel = () => {
 
   return (
     <div className="carousel-container" style={{ height: '400px' }}>
+      {/* Mapeo de las diapositivas para renderizar el contenido visual y textual */}
       {slides.map((slide, index) => (
         <div 
           key={index} 
@@ -42,6 +45,7 @@ const DishesCarousel = () => {
           </div>
         </div>
       ))}
+      {/* Indicadores inferiores (puntos) para navegación manual del carrusel */}
       <div className="carousel-dots">
         {slides.map((_, index) => (
           <div 

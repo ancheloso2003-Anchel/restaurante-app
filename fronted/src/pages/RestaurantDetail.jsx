@@ -1,3 +1,4 @@
+// Importación de hooks de React para el manejo de estado y efectos secundarios
 import { useState, useEffect } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import axios from 'axios'
@@ -11,6 +12,7 @@ const RestaurantDetail = () => {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
+    // Función asíncrona para obtener los detalles del restaurante y su menú desde la API
     const fetchData = async () => {
       try {
         const [resRes, dishesRes] = await Promise.all([
@@ -40,6 +42,7 @@ const RestaurantDetail = () => {
   if (loading) return <div className="loading">Cargando menú...</div>
   if (!restaurant) return <div>Restaurante no encontrado</div>
 
+  // Renderizado principal del componente con diseño receptivo y navegación de vuelta
   return (
     <div className="detail-container" style={{ textAlign: 'left', maxWidth: '800px', margin: '0 auto' }}>
       <Link to="/" className="nav-link" style={{ display: 'flex', alignItems: 'center', marginBottom: '2rem' }}>
@@ -51,6 +54,7 @@ const RestaurantDetail = () => {
         <p style={{ color: '#94a3b8' }}>Barrio: {restaurant.barrio}</p>
       </div>
 
+      {/* Sección que itera sobre las categorías de platos y los muestra en una lista */}
       <div className="menu-sections">
         {Object.entries(dishes).map(([category, items]) => (
           <div key={category} style={{ marginBottom: '2.5rem' }}>

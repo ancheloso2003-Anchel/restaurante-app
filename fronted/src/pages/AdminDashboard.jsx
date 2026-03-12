@@ -1,3 +1,4 @@
+// Panel administrativo para la gestión de restaurantes y categorías
 import { useState, useEffect } from 'react'
 import axios from 'axios'
 import { Plus, Trash2, Edit2, Save, X } from 'lucide-react'
@@ -28,6 +29,7 @@ const AdminDashboard = () => {
     }
   }
 
+  // Controlador para procesar la creación de un nuevo restaurante
   const handleAddRestaurant = async (e) => {
     e.preventDefault()
     try {
@@ -39,6 +41,7 @@ const AdminDashboard = () => {
     }
   }
 
+  // Elimina un restaurante previa confirmación del usuario
   const handleDeleteRestaurant = async (id) => {
     if (!window.confirm('¿Estás seguro de que quieres eliminar este restaurante?')) return
     try {
@@ -95,6 +98,7 @@ const AdminDashboard = () => {
       </div>
 
       <h2>Gestionar Restaurantes</h2>
+      {/* Listado dinámico de restaurantes con opciones de edición y borrado */}
       <div className="restaurants-list">
         {restaurants.map(res => (
           <div key={res.restauranteID} className="glass-card" style={{ marginBottom: '1rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>

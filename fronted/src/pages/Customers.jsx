@@ -1,3 +1,4 @@
+// Componente que muestra el listado de clientes premium de la plataforma
 import { useState, useEffect } from 'react'
 import axios from 'axios'
 import { User, MapPin, Mail, Phone, Calendar } from 'lucide-react'
@@ -17,6 +18,7 @@ const Customers = () => {
   ]
 
   useEffect(() => {
+    // Función para obtener los clientes del backend y asignarles fotos aleatorias
     const fetchCustomers = async () => {
       try {
         const response = await axios.get('http://localhost:4000/customers')
@@ -42,117 +44,124 @@ const Customers = () => {
   )
 
   return (
+    // Estructura principal de la página con rejilla de tarjetas de clientes
     <div className="customers-container" style={{ padding: '2rem', maxWidth: '1200px', margin: '0 auto' }}>
-      <header style={{ marginBottom: '3rem', textAlign: 'center' }}>
+      <header className="animate-fade-in-up" style={{ marginBottom: '5rem', textAlign: 'center' }}>
         <h1 style={{ 
-          fontSize: '3rem', 
-          fontWeight: '800', 
-          background: 'linear-gradient(to right, #fff, #94a3b8)', 
-          WebkitBackgroundClip: 'text', 
-          WebkitTextFillColor: 'transparent',
-          marginBottom: '1rem'
+          fontSize: '4rem', 
+          fontWeight: '900', 
+          marginBottom: '1rem',
+          letterSpacing: '-2px'
         }}>
           Nuestra Comunidad
         </h1>
-        <p style={{ color: '#94a3b8', fontSize: '1.2rem', maxWidth: '600px', margin: '0 auto' }}>
-          Conoce a las personas que hacen de nuestra plataforma un lugar especial.
+        <p style={{ color: '#94a3b8', fontSize: '1.25rem', maxWidth: '600px', margin: '0 auto', lineHeight: '1.6' }}>
+          Conoce a las personas que hacen de nuestra plataforma un lugar especial y gourmet.
         </p>
       </header>
       
       <div className="grid-container" style={{ 
         display: 'grid', 
-        gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', 
-        gap: '2rem' 
+        gridTemplateColumns: 'repeat(auto-fill, minmax(340px, 1fr))', 
+        gap: '2.5rem' 
       }}>
-        {customers.map((c) => (
-          <div key={c.clienteID} className="glass-card" style={{ 
-            padding: '2rem',
-            borderRadius: '24px',
-            background: 'rgba(255, 255, 255, 0.03)',
-            backdropFilter: 'blur(10px)',
-            border: '1px solid rgba(255, 255, 255, 0.05)',
-            transition: 'transform 0.3s ease, box-shadow 0.3s ease',
+        {/* Recorre el array de clientes para generar cada tarjeta individual */}
+        {customers.map((c, index) => (
+          <div key={c.clienteID} className="glass-card animate-fade-in-up" style={{ 
+            padding: '2.5rem',
+            borderRadius: '30px',
+            background: 'var(--bg-card)',
+            backdropFilter: 'blur(20px)',
+            border: '1px solid var(--border-glass)',
             cursor: 'pointer',
             position: 'relative',
-            overflow: 'hidden'
-          }}
-          onMouseEnter={(e) => {
-            e.currentTarget.style.transform = 'translateY(-10px)'
-            e.currentTarget.style.boxShadow = '0 20px 40px rgba(0,0,0,0.3)'
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.transform = 'translateY(0)'
-            e.currentTarget.style.boxShadow = 'none'
+            overflow: 'hidden',
+            animationDelay: `${index * 0.1}s`,
+            textAlign: 'left'
           }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '1.5rem', marginBottom: '1.5rem' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '1.5rem', marginBottom: '2rem' }}>
               <div style={{ position: 'relative' }}>
                 <img 
                   src={c.foto} 
                   alt={c.nombre} 
+                  className="customer-avatar"
                   style={{ 
-                    width: '80px', 
-                    height: '80px', 
+                    width: '90px', 
+                    height: '90px', 
                     borderRadius: '50%', 
                     objectFit: 'cover',
                     border: '3px solid var(--primary)',
-                    padding: '3px'
+                    padding: '4px',
+                    transition: 'transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275)'
                   }} 
                 />
                 <div style={{ 
                   position: 'absolute', 
-                  bottom: '5px', 
-                  right: '5px', 
-                  width: '15px', 
-                  height: '15px', 
+                  bottom: '8px', 
+                  right: '8px', 
+                  width: '18px', 
+                  height: '18px', 
                   borderRadius: '50%', 
-                  background: '#10b981', 
-                  border: '2px solid #0f172a' 
+                  background: 'var(--primary)', 
+                  border: '3px solid #020617',
+                  boxShadow: '0 0 10px var(--primary)'
                 }}></div>
               </div>
               <div>
-                <h3 style={{ margin: 0, fontSize: '1.25rem', color: '#f8fafc' }}>
+                <h3 style={{ margin: 0, fontSize: '1.4rem', color: '#fff', fontWeight: '800' }}>
                   {c.nombre} {c.apellido1}
                 </h3>
-                <div style={{ display: 'flex', alignItems: 'center', color: '#94a3b8', fontSize: '0.85rem', marginTop: '0.25rem' }}>
-                  <MapPin size={14} style={{ marginRight: '4px' }} />
+                <div style={{ display: 'flex', alignItems: 'center', color: '#64748b', fontSize: '0.9rem', marginTop: '0.4rem', fontWeight: '600' }}>
+                  <MapPin size={14} style={{ marginRight: '6px', color: 'var(--primary)' }} />
                   {c.poblacion}
                 </div>
               </div>
             </div>
 
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', marginBottom: '1.5rem' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', color: '#64748b' }}>
-                <Mail size={16} />
-                <span style={{ fontSize: '0.9rem' }}>{c.nombre.toLowerCase()}@example.com</span>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', marginBottom: '2rem' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', color: '#94a3b8', background: 'rgba(0,0,0,0.2)', padding: '12px 16px', borderRadius: '15px' }}>
+                <Mail size={18} color="var(--primary)" />
+                <span style={{ fontSize: '0.95rem', fontWeight: '500' }}>{c.nombre.toLowerCase()}@gastroweb.com</span>
               </div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', color: '#64748b' }}>
-                <Calendar size={16} />
-                <span style={{ fontSize: '0.9rem' }}>Miembro desde 2024</span>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', color: '#94a3b8', background: 'rgba(0,0,0,0.2)', padding: '12px 16px', borderRadius: '15px' }}>
+                <Calendar size={18} color="var(--primary)" />
+                <span style={{ fontSize: '0.95rem', fontWeight: '500' }}>Miembro Gastropass Oro</span>
               </div>
             </div>
 
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingTop: '1rem', borderTop: '1px solid rgba(255,255,255,0.05)' }}>
+            <div style={{ 
+              display: 'flex', 
+              justifyContent: 'space-between', 
+              alignItems: 'center', 
+              paddingTop: '1.5rem', 
+              borderTop: '1px solid rgba(255,255,255,0.05)' 
+            }}>
               <span style={{ 
-                fontSize: '0.7rem', 
-                fontWeight: '600',
+                fontSize: '0.75rem', 
+                fontWeight: '800',
                 textTransform: 'uppercase',
-                letterSpacing: '0.05em',
-                background: c.sexo === 'H' ? 'rgba(56, 189, 248, 0.1)' : 'rgba(244, 114, 182, 0.1)', 
-                color: c.sexo === 'H' ? '#38bdf8' : '#f472b6',
-                padding: '4px 12px', 
+                letterSpacing: '1.5px',
+                background: c.sexo === 'H' ? 'rgba(16, 185, 129, 0.1)' : 'rgba(59, 130, 246, 0.1)', 
+                color: c.sexo === 'H' ? 'var(--primary)' : '#3b82f6',
+                padding: '6px 16px', 
                 borderRadius: '99px',
+                border: `1px solid ${c.sexo === 'H' ? 'rgba(16, 185, 129, 0.2)' : 'rgba(59, 130, 246, 0.2)'}`
               }}>
-                {c.sexo === 'H' ? 'Cliente Premium' : 'Clienta Premium'}
+                {c.sexo === 'H' ? 'PREMIUM GOURMET' : 'PREMIUM GOURMET'}
               </span>
               <button style={{ 
                 background: 'transparent', 
                 border: 'none', 
                 color: 'var(--primary)', 
-                fontSize: '0.85rem', 
-                fontWeight: '600',
-                cursor: 'pointer'
+                fontSize: '0.9rem', 
+                fontWeight: '700',
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '4px',
+                boxShadow: 'none'
               }}>
-                Ver perfil
+                Perfil <User size={14} />
               </button>
             </div>
           </div>

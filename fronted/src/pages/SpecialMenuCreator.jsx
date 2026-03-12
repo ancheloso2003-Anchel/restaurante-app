@@ -1,3 +1,4 @@
+// Importación de dependencias necesarias para el creador de menús especiales
 import { useState, useEffect } from 'react'
 import axios from 'axios'
 import DishItem from '../components/DishItem'
@@ -25,14 +26,14 @@ const SpecialMenuCreator = () => {
     fetchRestaurants()
   }, [])
 
-  // Add or remove a restaurant from the selection list
+  // Lógica para alternar la selección de un restaurante en la lista de IDs seleccionados
   const toggleSelection = (id) => {
     setSelectedIds(prev => 
       prev.includes(id) ? prev.filter(i => i !== id) : [...prev, id]
     )
   }
 
-  // Fetch all dishes from selected restaurants and group them by category
+  // Función para obtener y combinar los platos de todos los restaurantes seleccionados
   const generateMenu = async () => {
     if (selectedIds.length === 0) return
     setLoading(true)
@@ -129,7 +130,7 @@ const SpecialMenuCreator = () => {
             </div>
           </div>
 
-          {/* Floating Action Bar */}
+          {/* Barra de acción flotante que aparece cuando hay al menos un restaurante seleccionado */}
           <div style={{
             position: 'fixed',
             bottom: '2rem',

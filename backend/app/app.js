@@ -1,3 +1,4 @@
+// Configuración inicial del servidor Express y middleware necesario
 const express = require('express')
 const cors = require('cors')
 const mysql = require('mysql2')
@@ -8,7 +9,7 @@ app.use(cors())
 const port = 3000
 let db
 
-// Function to establish a connection with retries
+// Función para establecer la conexión con la base de datos MySQL con sistema de reintentos
 function connectWithRetry() {
   db = mysql.createConnection({
     host: process.env.DB_HOST,
@@ -33,9 +34,8 @@ function connectWithRetry() {
 // Start the connection with retries
 connectWithRetry()
 
-// Define your endpoints
-
-// Get all categories
+// Definición de los endpoints de la API para el manejo de datos de restaurantes y pedidos
+// Obtener todas las categorías de la base de datos
 app.get('/categories', (req, res) => {
   db.query('SELECT * FROM categorias', (err, results) => {
     if (err) {
@@ -236,7 +236,7 @@ app.get('/restaurants/:id/dishes', (req, res) => {
   )
 })
 
-// Start the server
+// Inicio del servidor para escuchar peticiones en el puerto configurado
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`)
 })

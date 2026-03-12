@@ -1,3 +1,4 @@
+// Componente que muestra un ítem individual de la carta con su nombre, descripción y precio
 /**
  * DishItem Component
  * Renders a single dish card with a title, description, and price.
@@ -6,6 +7,7 @@
 const DishItem = ({ dish, showAdmin = false, onEdit, onDelete }) => {
   return (
     <div className="glass-card dish-card">
+      {/* Contenedor de la información textual del plato */}
       <div style={{ flex: 1, paddingRight: '2rem' }}>
         {/* Title & Description of the dish */}
         <h4 style={{ margin: 0, fontSize: '1.2rem', fontWeight: '700' }}>{dish.plato}</h4>
@@ -17,10 +19,10 @@ const DishItem = ({ dish, showAdmin = false, onEdit, onDelete }) => {
       </div>
       
       <div style={{ display: 'flex', alignItems: 'center', gap: '2rem' }}>
-        {/* Price Tag with Emerald Gradient (styled in CSS) */}
+        {/* Etiqueta de precio formateada con el símbolo del euro (€) */}
         <span className="dish-price">{dish.precio}€</span>
         
-        {/* Admin Interface: Edit/Delete buttons visible only in admin panel */}
+        {/* Botones de control administrativo que solo se muestran si showAdmin es verdadero */}
         {showAdmin && (
           <div style={{ display: 'flex', gap: '0.75rem' }}>
              <button 

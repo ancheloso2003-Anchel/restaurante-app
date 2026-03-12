@@ -1,3 +1,4 @@
+// Vista que muestra el catálogo completo de platos de todos los establecimientos
 import { useState, useEffect } from 'react'
 import axios from 'axios'
 import DishItem from '../components/DishItem'
@@ -9,6 +10,7 @@ const AllDishes = () => {
   const [searchTerm, setSearchTerm] = useState('')
   const [loading, setLoading] = useState(true)
 
+  // Efecto para cargar todos los platos disponibles al montar el componente
   useEffect(() => {
     const fetchDishes = async () => {
       try {
@@ -23,6 +25,7 @@ const AllDishes = () => {
     fetchDishes()
   }, [])
 
+  // Filtrado reactivo de platos basado en el término de búsqueda ingresado por el usuario
   const filteredDishes = dishes.filter(d => 
     d.plato.toLowerCase().includes(searchTerm.toLowerCase())
   )
@@ -46,6 +49,7 @@ const AllDishes = () => {
         />
       </div>
 
+      {/* Visualización de la lista filtrada o mensaje informativo si no hay resultados */}
       <div className="dishes-list" style={{ maxWidth: '800px', width: '100%', margin: '0 auto' }}>
         {filteredDishes.length > 0 ? (
           filteredDishes.map(dish => (

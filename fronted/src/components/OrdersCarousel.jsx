@@ -1,3 +1,4 @@
+// Carrusel dinámico que presenta los pedidos realizados de forma visual y detallada
 import { useState, useEffect } from 'react'
 import axios from 'axios'
 import { ShoppingBag, ChevronLeft, ChevronRight, User, Utensils, Calendar, Receipt } from 'lucide-react'
@@ -8,13 +9,27 @@ const OrdersCarousel = () => {
   const [loading, setLoading] = useState(true)
   const [details, setDetails] = useState({})
 
+  // Imágenes representativas para los pedidos
+  const orderImages = [
+    'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=600&h=600&fit=crop',
+    'https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=600&h=600&fit=crop',
+    'https://images.unsplash.com/photo-1567620905732-2d1ec7bb7445?w=600&h=600&fit=crop',
+    'https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=600&h=600&fit=crop',
+    'https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?w=600&h=600&fit=crop',
+  ]
+
   useEffect(() => {
     const fetchOrders = async () => {
       try {
         const response = await axios.get('http://localhost:4000/orders')
-        setOrders(response.data)
-        if (response.data.length > 0) {
-          fetchOrderDetails(response.data[0].pedidoID)
+        // Enriquecemos con imágenes
+        const enriched = response.data.map((o, i) => ({
+          ...o,
+          imagen: orderImages[i % orderImages.length]
+        }))
+        setOrders(enriched)
+        if (enriched.length > 0) {
+          fetchOrderDetails(enriched[0].pedidoID)
         }
       } catch (error) {
         console.error('Error fetching orders:', error)
@@ -48,7 +63,7 @@ const OrdersCarousel = () => {
   }
 
   if (loading) return (
-    <div style={{ height: '400px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+    <div style={{ height: '500px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
       <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
     </div>
   )
@@ -60,179 +75,117 @@ const OrdersCarousel = () => {
   const total = currentDetails.reduce((acc, item) => acc + (item.precio * item.cantidad), 0)
 
   return (
-    <div className="orders-carousel" style={{ position: 'relative', width: '100%', maxWidth: '800px', margin: '0 auto' }}>
+    // Estructura del carrusel con diseño de tarjeta de cristal para cada pedido
+    <div className="orders-carousel animate-fade-in-up" style={{ position: 'relative', width: '100%', maxWidth: '1000px', margin: '0 auto' }}>
       <div style={{ 
         display: 'flex', 
-        alignItems: 'center', 
-        gap: '2rem',
+        alignItems: 'stretch', 
+        gap: '0',
         background: 'rgba(31, 41, 55, 0.4)',
-        borderRadius: '30px',
-        padding: '3rem',
+        borderRadius: '40px',
+        overflow: 'hidden',
         border: '1px solid var(--border-glass)',
-        backdropFilter: 'blur(12px)',
-        minHeight: '400px',
-        boxShadow: '0 20px 40px rgba(0,0,0,0.4)'
+        backdropFilter: 'blur(20px)',
+        minHeight: '550px',
+        boxShadow: '0 30px 60px rgba(0,0,0,0.5)'
       }}>
-        {/* Navigation Buttons */}
-        <button 
-          onClick={prevSlide}
-          style={{ 
-            background: 'rgba(251, 191, 36, 0.05)', 
-            border: '1px solid rgba(251, 191, 36, 0.1)', 
-            borderRadius: '50%', 
-            width: '50px', 
-            height: '50px',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            cursor: 'pointer',
-            transition: 'all 0.3s',
-            color: 'var(--primary)'
-          }}
-          onMouseEnter={(e) => {
-            e.currentTarget.style.background = 'var(--primary)';
-            e.currentTarget.style.color = '#111827';
-            e.currentTarget.style.transform = 'scale(1.1)';
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.background = 'rgba(251, 191, 36, 0.05)';
-            e.currentTarget.style.color = 'var(--primary)';
-            e.currentTarget.style.transform = 'scale(1)';
-          }}
-        >
-          <ChevronLeft size={24} />
-        </button>
-
-        {/* Content */}
-        <div style={{ flex: 1, textAlign: 'left' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '2rem' }}>
-            <div>
-              <span style={{ 
-                background: 'rgba(251, 191, 36, 0.1)', 
-                color: 'var(--primary)', 
-                padding: '4px 12px', 
-                borderRadius: '8px', 
-                fontSize: '0.7rem',
-                fontWeight: '800',
-                marginBottom: '1rem',
-                display: 'inline-block',
-                border: '1px solid rgba(251, 191, 36, 0.2)',
-                letterSpacing: '1px'
-              }}>
-                PEDIDO #{currentOrder.pedidoID}
-              </span>
-              <h2 style={{ margin: 0, fontSize: '2.5rem', fontWeight: '800', background: 'linear-gradient(to bottom right, #fff, #fbbf24)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
-                {currentOrder.restaurante}
-              </h2>
-            </div>
-            <div style={{ textAlign: 'right' }}>
-              <div style={{ color: '#94a3b8', fontSize: '0.8rem', textTransform: 'uppercase', letterSpacing: '1px' }}>Estado</div>
-              <div style={{ color: '#fbbf24', fontWeight: '800', fontSize: '1.1rem' }}>COMPLETADO</div>
-            </div>
-          </div>
-
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem', marginBottom: '2rem' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', background: 'rgba(0,0,0,0.2)', padding: '12px', borderRadius: '15px' }}>
-              <div style={{ background: 'rgba(251, 191, 36, 0.1)', padding: '10px', borderRadius: '10px' }}>
-                <User size={20} color="var(--primary)" />
-              </div>
-              <div>
-                <div style={{ fontSize: '0.75rem', color: '#64748b', textTransform: 'uppercase' }}>Cliente</div>
-                <div style={{ fontWeight: '600', color: '#fff' }}>{currentOrder.nombre} {currentOrder.apellido1}</div>
-              </div>
-            </div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', background: 'rgba(0,0,0,0.2)', padding: '12px', borderRadius: '15px' }}>
-              <div style={{ background: 'rgba(251, 191, 36, 0.1)', padding: '10px', borderRadius: '10px' }}>
-                <Calendar size={20} color="var(--primary)" />
-              </div>
-              <div>
-                <div style={{ fontSize: '0.75rem', color: '#64748b', textTransform: 'uppercase' }}>Fecha</div>
-                <div style={{ fontWeight: '600', color: '#fff' }}>{new Date(currentOrder.fecha).toLocaleDateString()}</div>
-              </div>
-            </div>
-          </div>
-
-          <div style={{ 
-            background: 'rgba(255,255,255,0.02)', 
-            borderRadius: '20px', 
-            padding: '2rem',
-            marginBottom: '1rem',
-            border: '1px solid rgba(255,255,255,0.05)'
-          }}>
-            <h4 style={{ margin: '0 0 1.5rem 0', display: 'flex', alignItems: 'center', gap: '8px', color: '#94a3b8', fontSize: '0.9rem', textTransform: 'uppercase', letterSpacing: '1px' }}>
-              <Receipt size={18} /> Resumen de platos
-            </h4>
-            {currentDetails.length > 0 ? (
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-                {currentDetails.map((item, i) => (
-                  <div key={i} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                      <span style={{ color: 'var(--primary)', fontWeight: '800' }}>{item.cantidad}x</span>
-                      <span style={{ color: '#cbd5e1', fontWeight: '500' }}>{item.plato}</span>
-                    </div>
-                    <span style={{ fontWeight: '600', color: '#fff' }}>{(item.precio * item.cantidad).toFixed(2)}€</span>
-                  </div>
-                ))}
-                <div style={{ 
-                  marginTop: '1.5rem', 
-                  paddingTop: '1.5rem', 
-                  borderTop: '1px solid rgba(255,255,255,0.05)',
-                  display: 'flex',
-                  justifyContent: 'space-between',
-                  alignItems: 'baseline'
-                }}>
-                  <span style={{ fontWeight: '700', color: '#94a3b8', fontSize: '1.1rem' }}>Total Factura</span>
-                  <span style={{ 
-                    fontWeight: '900', 
-                    fontSize: '2rem', 
-                    color: 'var(--primary)',
-                    textShadow: '0 0 20px rgba(251, 191, 36, 0.3)'
-                  }}>
-                    {total.toFixed(2)}€
-                  </span>
-                </div>
-              </div>
-            ) : (
-              <div style={{ textAlign: 'center', padding: '2rem' }}>
-                 <div className="loading" style={{ fontSize: '1rem' }}>Cargando detalles...</div>
-              </div>
-            )}
+        {/* Lado izquierdo: Imagen del Pedido */}
+        <div style={{ width: '40%', position: 'relative', overflow: 'hidden' }}>
+          <img 
+            src={currentOrder.imagen} 
+            alt="Pedido" 
+            key={currentOrder.pedidoID}
+            className="animate-fade-in-up"
+            style={{ width: '100%', height: '100%', objectFit: 'cover', filter: 'brightness(0.8)' }} 
+          />
+          <div style={{ position: 'absolute', top: '2rem', left: '2rem', zIndex: 5 }}>
+            <span style={{ 
+              background: 'rgba(2, 6, 23, 0.8)', 
+              color: 'var(--primary)', 
+              padding: '8px 20px', 
+              borderRadius: '15px', 
+              fontSize: '0.8rem',
+              fontWeight: '900',
+              backdropFilter: 'blur(10px)',
+              border: '1px solid var(--primary)'
+            }}>
+              #{currentOrder.pedidoID}
+            </span>
           </div>
         </div>
 
-        {/* Navigation Button */}
-        <button 
-          onClick={nextSlide}
-          style={{ 
-            background: 'rgba(251, 191, 36, 0.05)', 
-            border: '1px solid rgba(251, 191, 36, 0.1)', 
-            borderRadius: '50%', 
-            width: '50px', 
-            height: '50px',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            cursor: 'pointer',
-            transition: 'all 0.3s',
-            color: 'var(--primary)'
-          }}
-          onMouseEnter={(e) => {
-            e.currentTarget.style.background = 'var(--primary)';
-            e.currentTarget.style.color = '#111827';
-            e.currentTarget.style.transform = 'scale(1.1)';
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.background = 'rgba(251, 191, 36, 0.05)';
-            e.currentTarget.style.color = 'var(--primary)';
-            e.currentTarget.style.transform = 'scale(1)';
-          }}
-        >
-          <ChevronRight size={24} />
-        </button>
+        {/* Lado derecho: Información */}
+        <div style={{ width: '60%', padding: '3.5rem', display: 'flex', flexDirection: 'column', textAlign: 'left', position: 'relative' }}>
+          {/* Navigation Overlay */}
+          <div style={{ position: 'absolute', top: '2rem', right: '2rem', display: 'flex', gap: '1rem' }}>
+            <button 
+              onClick={prevSlide}
+              style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '12px', width: '40px', height: '40px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+            >
+              <ChevronLeft size={20} color="white" />
+            </button>
+            <button 
+              onClick={nextSlide}
+              style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '12px', width: '40px', height: '40px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+            >
+              <ChevronRight size={20} color="white" />
+            </button>
+          </div>
+
+          <div style={{ marginBottom: '2.5rem' }}>
+            <h2 className="animate-slide-in-right" key={currentOrder.restaurante} style={{ margin: 0, fontSize: '3rem', fontWeight: '900', color: 'white' }}>
+              {currentOrder.restaurante}
+            </h2>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: '#94a3b8', marginTop: '10px' }}>
+              <User size={16} /> <span style={{ fontWeight: '600' }}>{currentOrder.nombre} {currentOrder.apellido1}</span>
+              <span style={{ margin: '0 10px', opacity: 0.3 }}>|</span>
+              <Calendar size={16} /> <span>{new Date(currentOrder.fecha).toLocaleDateString()}</span>
+            </div>
+          </div>
+
+          <div 
+            className="animate-fade-in-up" 
+            key={currentOrder.pedidoID + '_details'}
+            style={{ 
+              flex: 1, 
+              background: 'rgba(0,0,0,0.2)', 
+              borderRadius: '25px', 
+              padding: '2rem',
+              border: '1px solid rgba(255,255,255,0.03)'
+            }}
+          >
+            <h4 style={{ margin: '0 0 1.5rem 0', display: 'flex', alignItems: 'center', gap: '10px', color: 'var(--primary)', textTransform: 'uppercase', letterSpacing: '2px', fontSize: '0.8rem', fontWeight: '800' }}>
+              <Receipt size={18} /> Artículos del Pedido
+            </h4>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+              {currentDetails.map((item, i) => (
+                <div key={i} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                    <span style={{ fontSize: '1rem', color: 'var(--primary)', fontWeight: '800' }}>{item.cantidad}×</span>
+                    <span style={{ color: '#cbd5e1', fontWeight: '500' }}>{item.plato}</span>
+                  </div>
+                  <span style={{ fontWeight: '700', color: '#fff' }}>{(item.precio * item.cantidad).toFixed(2)}€</span>
+                </div>
+              ))}
+            </div>
+            
+            <div style={{ 
+              marginTop: '2rem', 
+              paddingTop: '1.5rem', 
+              borderTop: '1px solid rgba(255,255,255,0.1)',
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center'
+            }}>
+              <span style={{ fontWeight: '700', color: '#94a3b8' }}>Importe Total</span>
+              <span style={{ fontWeight: '900', fontSize: '2.2rem', color: 'var(--primary)' }}>{total.toFixed(2)}€</span>
+            </div>
+          </div>
+        </div>
       </div>
 
-      {/* Progress Indicators */}
-      <div style={{ display: 'flex', justifyContent: 'center', gap: '8px', marginTop: '2rem' }}>
+      {/* Indicadores de progreso para conocer el número total de pedidos y la posición actual */}
+      <div style={{ display: 'flex', justifyContent: 'center', gap: '12px', marginTop: '2.5rem' }}>
         {orders.map((_, i) => (
           <div 
             key={i}
@@ -241,12 +194,12 @@ const OrdersCarousel = () => {
               fetchOrderDetails(orders[i].pedidoID)
             }}
             style={{ 
-              width: i === currentIndex ? '30px' : '8px', 
-              height: '8px', 
-              borderRadius: '4px', 
+              width: i === currentIndex ? '40px' : '10px', 
+              height: '10px', 
+              borderRadius: '5px', 
               background: i === currentIndex ? 'var(--primary)' : 'rgba(255,255,255,0.1)',
               cursor: 'pointer',
-              transition: 'all 0.3s'
+              transition: 'all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)'
             }}
           />
         ))}

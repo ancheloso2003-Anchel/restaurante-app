@@ -1,3 +1,4 @@
+// Barra de navegación principal que permite moverse entre las diferentes secciones de la aplicación
 import { Link, useLocation } from 'react-router-dom'
 import { UtensilsCrossed, LayoutDashboard, Sparkles, Home, ShoppingBag } from 'lucide-react'
 
@@ -9,12 +10,12 @@ import { UtensilsCrossed, LayoutDashboard, Sparkles, Home, ShoppingBag } from 'l
 const Navbar = () => {
   const location = useLocation()
   
-  // Helper to determine if the given path matches the current browser location
+  // Función auxiliar para determinar si una ruta coincide con la ubicación actual del navegador
   const isActive = (path) => location.pathname === path
 
   return (
     <nav className="navbar">
-      {/* Brand Section: "Gourmet OS" styled with logo and gradient text */}
+      {/* Sección con el logotipo y el nombre de la plataforma (Gourmet OS) */}
       <div className="nav-brand" style={{ display: 'flex', alignItems: 'center' }}>
         <UtensilsCrossed 
           size={28} 
@@ -31,7 +32,7 @@ const Navbar = () => {
         }}>Gourmet OS</span>
       </div>
 
-      {/* Main Navigation Links */}
+      {/* Conjunto de enlaces de navegación dinámicos */}
       <div className="nav-links">
         {/* Basic Route Links */}
         <Link to="/" className={`nav-link ${isActive('/') ? 'active' : ''}`}>Inicio</Link>

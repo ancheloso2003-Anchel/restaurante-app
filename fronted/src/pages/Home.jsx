@@ -1,3 +1,4 @@
+// Página principal que muestra el carrusel destacado y el listado de restaurantes
 import { useState, useEffect } from 'react'
 import axios from 'axios'
 import RestaurantCard from '../components/RestaurantCard'
@@ -8,6 +9,7 @@ const Home = () => {
   const [restaurants, setRestaurants] = useState([])
   const [loading, setLoading] = useState(true)
 
+  // Datos estáticos de testimonios para mostrar la satisfacción de los clientes
   const testimonials = [
     {
       id: 1,
@@ -32,6 +34,7 @@ const Home = () => {
     }
   ]
 
+  // Carga inicial de todos los restaurantes disponibles en la base de datos
   useEffect(() => {
     const fetchRestaurants = async () => {
       try {
@@ -57,6 +60,7 @@ const Home = () => {
         <p style={{ color: '#94a3b8', marginBottom: '3rem', textAlign: 'center' }}>Descubre la mejor gastronomía de la ciudad</p>
         
         <div className="grid-container">
+          {/* Mapeo de restaurantes para crear tarjetas interactivas */}
           {restaurants.map((res) => (
             <RestaurantCard key={res.restauranteID} restaurant={res} />
           ))}

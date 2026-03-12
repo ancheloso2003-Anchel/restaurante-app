@@ -1,3 +1,4 @@
+// Carrusel especializado con efectos 3D y diseño de tarjetas con glassmorphism
 import { useState, useEffect } from 'react'
 import { Sparkles, ChevronRight, ChevronLeft, Info } from 'lucide-react'
 
@@ -37,7 +38,7 @@ const SpecialCarousel = () => {
   const [current, setCurrent] = useState(0) // Index of the active slide
   const [isHovered, setIsHovered] = useState(false) // Pause timer on hover
 
-  // Auto-slide effect logic
+  // Lógica del carrusel para avanzar automáticamente, pausándose cuando el ratón está encima
   useEffect(() => {
     if (isHovered) return // Don't advance if the user is interacting
     const timer = setInterval(() => {
@@ -76,7 +77,7 @@ const SpecialCarousel = () => {
         let opacity = 0
         let zIndex = 0
 
-        // 3D positioning logic
+        // Lógica de posicionamiento 3D basada en el índice actual
         if (isActive) {
           transform = 'translateX(0) scale(1) rotateY(0deg)'
           opacity = 1
@@ -190,7 +191,7 @@ const SpecialCarousel = () => {
         <ChevronRight size={24} />
       </button>
 
-      {/* Pagination Dots */}
+      {/* Puntos de paginación inferiores para control de navegación rápida */}
       <div style={{
             position: 'absolute',
             bottom: '1rem',

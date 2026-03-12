@@ -1,3 +1,4 @@
+// Carrusel de contenido destacado para la página de inicio
 import { useState, useEffect } from 'react'
 
 const slides = [
@@ -21,6 +22,7 @@ const slides = [
 const FeaturedCarousel = () => {
   const [current, setCurrent] = useState(0)
 
+  // Gestión del cambio automático de diapositivas mediante un intervalo de tiempo
   useEffect(() => {
     const timer = setInterval(() => {
       setCurrent((prev) => (prev === slides.length - 1 ? 0 : prev + 1))
@@ -30,6 +32,7 @@ const FeaturedCarousel = () => {
 
   return (
     <div className="carousel-container">
+      {/* Visualización de cada diapositiva basada en el estado actual */}
       {slides.map((slide, index) => (
         <div 
           key={index} 
@@ -42,6 +45,7 @@ const FeaturedCarousel = () => {
           </div>
         </div>
       ))}
+      {/* Controles de navegación manual por puntos indicadores */}
       <div className="carousel-dots">
         {slides.map((_, index) => (
           <div 
