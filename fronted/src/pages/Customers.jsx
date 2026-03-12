@@ -7,26 +7,40 @@ const Customers = () => {
   const [customers, setCustomers] = useState([])
   const [loading, setLoading] = useState(true)
 
-  // Array of diverse customer photos from high-quality sources
-  const defaultPhotos = [
-    '/assets/customers/customer1.png',
+  // Arrays de fotos diversas según el género del cliente
+  const malePhotos = [
     'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop',
+    'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&h=400&fit=crop',
+    'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&h=400&fit=crop',
+    'https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=400&h=400&fit=crop',
+  ]
+
+  const femalePhotos = [
     'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400&h=400&fit=crop',
     'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=400&h=400&fit=crop',
-    'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&h=400&fit=crop',
     'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=400&h=400&fit=crop',
+    'https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?w=400&h=400&fit=crop',
   ]
 
   useEffect(() => {
-    // Función para obtener los clientes del backend y asignarles fotos aleatorias
     const fetchCustomers = async () => {
       try {
         const response = await axios.get('http://localhost:4000/customers')
-        // Enrich customers with random photos for demo purposes if they don't have one
-        const enrichedData = response.data.map((c, index) => ({
-          ...c,
-          foto: defaultPhotos[index % defaultPhotos.length]
-        }))
+        // Asignamos una foto coherente con el género (H/M) usando dos contadores separados
+        let mCount = 0
+        let fCount = 0
+        
+        const enrichedData = response.data.map((c) => {
+          if (c.sexo === 'H') {
+            const foto = malePhotos[mCount % malePhotos.length]
+            mCount++
+            return { ...c, foto }
+          } else {
+            const foto = femalePhotos[fCount % femalePhotos.length]
+            fCount++
+            return { ...c, foto }
+          }
+        })
         setCustomers(enrichedData)
       } catch (error) {
         console.error('Error fetching customers:', error)
