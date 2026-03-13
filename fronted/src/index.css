@@ -13,13 +13,13 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 
-  /* Theme Accents (Midnight Emerald) */
-  --primary: #10b981;        /* Emerald 500 */
-  --primary-hover: #059669;  /* Emerald 600 */
-  --secondary: #3b82f6;      /* Blue 500 */
+  /* Theme Accents (Neon Violet) */
+  --primary: #8b5cf6;        /* Violet 500 */
+  --primary-hover: #7c3aed;  /* Violet 600 */
+  --secondary: #ec4899;      /* Pink 500 */
   --bg-card: rgba(15, 23, 42, 0.6);   /* Frosted Navy */
-  --border-glass: rgba(16, 185, 129, 0.1);
-  --accent-glow: rgba(16, 185, 129, 0.2);
+  --border-glass: rgba(139, 92, 246, 0.1);
+  --accent-glow: rgba(139, 92, 246, 0.2);
 }
 
 /* --- GLOBAL LAYOUT --- */
@@ -30,8 +30,8 @@ body {
   min-width: 320px;
   min-height: 100vh;
   /* Dual radial gradient for atmospheric lighting */
-  background: radial-gradient(circle at top right, #064e3b, #020617 60%),
-              radial-gradient(circle at bottom left, #1e1b4b, #020617 60%);
+  background: radial-gradient(circle at top right, #2e1065, #020617 60%),
+              radial-gradient(circle at bottom left, #4a044e, #020617 60%);
   background-attachment: fixed;
 }
 
@@ -58,7 +58,7 @@ a:hover {
 h1 {
   font-size: 4rem;
   line-height: 1;
-  background: linear-gradient(to bottom right, #fff, #10b981);
+  background: linear-gradient(to bottom right, #fff, #8b5cf6);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -83,14 +83,14 @@ h1 {
 
 .glass-card:hover {
   transform: translateY(-10px) scale(1.02);
-  border-color: rgba(16, 185, 129, 0.4);
-  box-shadow: 0 30px 60px -20px rgba(16, 185, 129, 0.2);
+  border-color: rgba(139, 92, 246, 0.4);
+  box-shadow: 0 30px 60px -20px rgba(139, 92, 246, 0.2);
 }
 
 /* Modern Rounded Buttons */
 button {
   border-radius: 12px;
-  border: 1px solid rgba(16, 185, 129, 0.2);
+  border: 1px solid rgba(139, 92, 246, 0.2);
   padding: 0.8em 1.6em;
   font-size: 1em;
   font-weight: 600;
@@ -99,13 +99,13 @@ button {
   color: #020617;
   cursor: pointer;
   transition: all 0.3s ease;
-  box-shadow: 0 4px 20px rgba(16, 185, 129, 0.3);
+  box-shadow: 0 4px 20px rgba(139, 92, 246, 0.3);
 }
 
 button:hover {
   background-color: var(--primary-hover);
   transform: translateY(-2px);
-  box-shadow: 0 8px 30px rgba(16, 185, 129, 0.4);
+  box-shadow: 0 8px 30px rgba(139, 92, 246, 0.4);
 }
 
 /* Base Grid Layout */
@@ -182,7 +182,7 @@ button:hover {
 .dish-price {
   font-family: 'Inter', sans-serif;
   font-weight: 800;
-  background: linear-gradient(to right, #10b981, #3b82f6);
+  background: linear-gradient(to right, #8b5cf6, #ec4899);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
