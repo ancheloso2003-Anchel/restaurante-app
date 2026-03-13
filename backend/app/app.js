@@ -6,7 +6,7 @@ require('dotenv').config()
 
 const app = express()
 app.use(cors())
-const port = 3000
+const port = process.env.PORT || 4000
 let db
 
 // Función para establecer la conexión con la base de datos MySQL con sistema de reintentos
