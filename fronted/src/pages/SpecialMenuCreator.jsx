@@ -5,6 +5,9 @@ import DishItem from '../components/DishItem'
 import SpecialCarousel from '../components/SpecialCarousel'
 import { Sparkles, Check, ArrowRight, RotateCcw } from 'lucide-react'
 
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:4000';
+
+
 const SpecialMenuCreator = () => {
   const [restaurants, setRestaurants] = useState([])
   const [selectedIds, setSelectedIds] = useState([])
@@ -15,7 +18,7 @@ const SpecialMenuCreator = () => {
   useEffect(() => {
     const fetchRestaurants = async () => {
       try {
-        const response = await axios.get('http://localhost:4000/restaurants')
+        const response = await axios.get(`${API_URL}/restaurants`)
         setRestaurants(response.data)
       } catch (error) {
         console.error('Error fetching restaurants:', error)
@@ -38,7 +41,7 @@ const SpecialMenuCreator = () => {
     if (selectedIds.length === 0) return
     setLoading(true)
     try {
-      const requests = selectedIds.map(id => axios.get(`http://localhost:4000/restaurants/${id}/dishes`))
+      const requests = selectedIds.map(id => axios.get(`${API_URL}/restaurants/${id}/dishes`))
       const results = await Promise.all(requests)
       
       const allDishes = results.flatMap(res => res.data)

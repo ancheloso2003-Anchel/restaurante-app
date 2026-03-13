@@ -3,6 +3,9 @@ import { useState, useEffect } from 'react'
 import axios from 'axios'
 import { Plus, Trash2, Edit2, Save, X } from 'lucide-react'
 
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:4000';
+
+
 const AdminDashboard = () => {
   const [restaurants, setRestaurants] = useState([])
   const [categories, setCategories] = useState([])
@@ -17,8 +20,8 @@ const AdminDashboard = () => {
   const fetchData = async () => {
     try {
       const [resRes, catRes] = await Promise.all([
-        axios.get('http://localhost:4000/restaurants'),
-        axios.get('http://localhost:4000/categories')
+        axios.get(`${API_URL}/restaurants`),
+        axios.get(`${API_URL}/categories`)
       ])
       setRestaurants(resRes.data)
       setCategories(catRes.data)
@@ -33,7 +36,7 @@ const AdminDashboard = () => {
   const handleAddRestaurant = async (e) => {
     e.preventDefault()
     try {
-      await axios.post('http://localhost:4000/restaurants', newRes)
+      await axios.post(`${API_URL}/restaurants`, newRes)
       setNewRes({ restaurante: '', barrio: '' })
       fetchData()
     } catch (error) {
@@ -45,7 +48,7 @@ const AdminDashboard = () => {
   const handleDeleteRestaurant = async (id) => {
     if (!window.confirm('¿Estás seguro de que quieres eliminar este restaurante?')) return
     try {
-      await axios.delete(`http://localhost:4000/restaurants/${id}`)
+      await axios.delete(`${API_URL}/restaurants/${id}`)
       fetchData()
     } catch (error) {
       console.error('Error deleting restaurant:', error)
@@ -54,7 +57,7 @@ const AdminDashboard = () => {
 
   const handleUpdateRestaurant = async () => {
     try {
-      await axios.put(`http://localhost:4000/restaurants/${editingRes.restauranteID}`, editingRes)
+      await axios.put(`${API_URL}/restaurants/${editingRes.restauranteID}`, editingRes)
       setEditingRes(null)
       fetchData()
     } catch (error) {

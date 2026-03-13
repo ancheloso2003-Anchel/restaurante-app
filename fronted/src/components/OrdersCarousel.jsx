@@ -3,6 +3,9 @@ import { useState, useEffect } from 'react'
 import axios from 'axios'
 import { ShoppingBag, ChevronLeft, ChevronRight, User, Utensils, Calendar, Receipt } from 'lucide-react'
 
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:4000';
+
+
 const OrdersCarousel = () => {
   const [orders, setOrders] = useState([])
   const [currentIndex, setCurrentIndex] = useState(0)
@@ -21,7 +24,7 @@ const OrdersCarousel = () => {
   useEffect(() => {
     const fetchOrders = async () => {
       try {
-        const response = await axios.get('http://localhost:4000/orders')
+        const response = await axios.get(`${API_URL}/orders`)
         // Enriquecemos con imágenes
         const enriched = response.data.map((o, i) => ({
           ...o,
@@ -43,7 +46,7 @@ const OrdersCarousel = () => {
   const fetchOrderDetails = async (orderId) => {
     if (details[orderId]) return
     try {
-      const response = await axios.get(`http://localhost:4000/order/${orderId}/dishes`)
+      const response = await axios.get(`${API_URL}/order/${orderId}/dishes`)
       setDetails(prev => ({ ...prev, [orderId]: response.data }))
     } catch (error) {
       console.error('Error fetching order details:', error)

@@ -5,6 +5,9 @@ import DishItem from '../components/DishItem'
 import DishesCarousel from '../components/DishesCarousel'
 import { Search } from 'lucide-react'
 
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:4000';
+
+
 const AllDishes = () => {
   const [dishes, setDishes] = useState([])
   const [searchTerm, setSearchTerm] = useState('')
@@ -14,7 +17,7 @@ const AllDishes = () => {
   useEffect(() => {
     const fetchDishes = async () => {
       try {
-        const response = await axios.get('http://localhost:4000/dishes')
+        const response = await axios.get(`${API_URL}/dishes`)
         setDishes(response.data)
       } catch (error) {
         console.error('Error fetching dishes:', error)

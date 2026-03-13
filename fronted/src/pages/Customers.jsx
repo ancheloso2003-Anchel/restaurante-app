@@ -3,6 +3,9 @@ import { useState, useEffect } from 'react'
 import axios from 'axios'
 import { User, MapPin, Mail, Phone, Calendar } from 'lucide-react'
 
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:4000';
+
+
 const Customers = () => {
   const [customers, setCustomers] = useState([])
   const [loading, setLoading] = useState(true)
@@ -25,7 +28,7 @@ const Customers = () => {
   useEffect(() => {
     const fetchCustomers = async () => {
       try {
-        const response = await axios.get('http://localhost:4000/customers')
+        const response = await axios.get(`${API_URL}/customers`)
         // Asignamos una foto coherente con el género (H/M) usando dos contadores separados
         let mCount = 0
         let fCount = 0

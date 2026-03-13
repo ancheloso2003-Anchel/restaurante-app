@@ -8,8 +8,8 @@ import './index.css'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    {/* Envoltura del enrutador para habilitar la navegación SPA */}
-    <BrowserRouter>
+    {/* Envoltura del enrutador con un basename dinámico para subdirectorios */}
+    <BrowserRouter basename={import.meta.env.BASE_URL}>
       <App />
     </BrowserRouter>
   </React.StrictMode>,

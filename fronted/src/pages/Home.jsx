@@ -5,6 +5,9 @@ import RestaurantCard from '../components/RestaurantCard'
 import FeaturedCarousel from '../components/FeaturedCarousel'
 import { Quote, Star } from 'lucide-react'
 
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:4000';
+
+
 const Home = () => {
   const [restaurants, setRestaurants] = useState([])
   const [loading, setLoading] = useState(true)
@@ -38,7 +41,7 @@ const Home = () => {
   useEffect(() => {
     const fetchRestaurants = async () => {
       try {
-        const response = await axios.get('http://localhost:4000/restaurants')
+        const response = await axios.get(`${API_URL}/restaurants`)
         setRestaurants(response.data)
       } catch (error) {
         console.error('Error fetching restaurants:', error)

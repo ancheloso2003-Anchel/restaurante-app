@@ -5,6 +5,9 @@ import axios from 'axios'
 import DishItem from '../components/DishItem'
 import { ChevronLeft } from 'lucide-react'
 
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:4000';
+
+
 const RestaurantDetail = () => {
   const { id } = useParams()
   const [restaurant, setRestaurant] = useState(null)
@@ -16,8 +19,8 @@ const RestaurantDetail = () => {
     const fetchData = async () => {
       try {
         const [resRes, dishesRes] = await Promise.all([
-          axios.get('http://localhost:4000/restaurants'),
-          axios.get(`http://localhost:4000/restaurants/${id}/dishes`)
+          axios.get(`${API_URL}/restaurants`),
+          axios.get(`${API_URL}/restaurants/${id}/dishes`)
         ])
         
         const currentRes = resRes.data.find(r => r.restauranteID === parseInt(id))

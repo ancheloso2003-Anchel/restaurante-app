@@ -3,6 +3,9 @@ import axios from 'axios'
 import { ShoppingBag, Calendar, User, Utensils, ChevronDown, ChevronUp } from 'lucide-react'
 import OrdersCarousel from '../components/OrdersCarousel'
 
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:4000';
+
+
 const Orders = () => {
   const [orders, setOrders] = useState([])
   const [expandedOrder, setExpandedOrder] = useState(null)
@@ -24,7 +27,7 @@ const Orders = () => {
 
   const fetchOrders = async () => {
     try {
-      const response = await axios.get('http://localhost:4000/orders')
+      const response = await axios.get(`${API_URL}/orders`)
       // Enriquecemos los datos con una imagen aleatoria para cada pedido
       const enrichedData = response.data.map((order, index) => ({
         ...order,
@@ -49,7 +52,7 @@ const Orders = () => {
     
     if (!orderDetails[orderId]) {
       try {
-        const response = await axios.get(`http://localhost:4000/order/${orderId}/dishes`)
+        const response = await axios.get(`${API_URL}/order/${orderId}/dishes`)
         setOrderDetails(prev => ({ ...prev, [orderId]: response.data }))
       } catch (error) {
         console.error('Error fetching order dishes:', error)
