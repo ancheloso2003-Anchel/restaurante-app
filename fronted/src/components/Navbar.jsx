@@ -29,7 +29,7 @@ const Navbar = () => {
             background: 'linear-gradient(to right, #fff, var(--primary))',
             WebkitBackgroundClip: 'text',
             WebkitTextFillColor: 'transparent'
-        }}>Gourmet OS</span>
+        }}>Restaurante App</span>
       </div>
 
       {/* Conjunto de enlaces de navegación dinámicos */}
