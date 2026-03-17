@@ -29,7 +29,7 @@ const Orders = () => {
 
   const fetchOrders = async () => {
     try {
-      const response = await axios.get(`${API_URL}/orders`, { timeout: 2000 })
+      const response = await axios.get(`${API_URL}/orders`, { timeout: 1000 })
       // Enriquecemos los datos con una imagen aleatoria para cada pedido
       const enrichedData = response.data.map((order, index) => ({
         ...order,
@@ -60,7 +60,7 @@ const Orders = () => {
     
     if (!orderDetails[orderId]) {
       try {
-        const response = await axios.get(`${API_URL}/order/${orderId}/dishes`, { timeout: 2000 })
+        const response = await axios.get(`${API_URL}/order/${orderId}/dishes`, { timeout: 1000 })
         setOrderDetails(prev => ({ ...prev, [orderId]: response.data }))
       } catch (error) {
         console.error('Error fetching order dishes:', error)

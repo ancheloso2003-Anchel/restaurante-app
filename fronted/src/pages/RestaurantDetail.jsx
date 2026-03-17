@@ -21,8 +21,8 @@ const RestaurantDetail = () => {
     const fetchData = async () => {
       try {
         const [resRes, dishesRes] = await Promise.all([
-          axios.get(`${API_URL}/restaurants`, { timeout: 2000 }),
-          axios.get(`${API_URL}/restaurants/${id}/dishes`, { timeout: 2000 })
+          axios.get(`${API_URL}/restaurants`, { timeout: 1000 }),
+          axios.get(`${API_URL}/restaurants/${id}/dishes`, { timeout: 1000 })
         ])
         
         const currentRes = resRes.data.find(r => r.restauranteID === parseInt(id))
@@ -57,8 +57,8 @@ const RestaurantDetail = () => {
   }, [id])
 
   if (loading) return <div className="loading">Cargando menú...</div>
-  if (error) return <div className="error-message" style={{ color: '#ef4444', padding: '2rem' }}>{error}</div>
-  if (!restaurant) return <div>Restaurante no encontrado</div>
+  
+  if (!restaurant && !error) return <div className="error-message">Restaurante no encontrado</div>
 
   // Renderizado principal del componente con diseño receptivo y navegación de vuelta
   return (
@@ -67,26 +67,51 @@ const RestaurantDetail = () => {
         <ChevronLeft size={20} /> Volver al listado
       </Link>
       
-      <div className="restaurant-header" style={{ marginBottom: '3rem' }}>
-        <h1 style={{ textAlign: 'left', marginBottom: '0.5rem' }}>{restaurant.restaurante}</h1>
-        <p style={{ color: '#94a3b8' }}>Barrio: {restaurant.barrio}</p>
-      </div>
-
-      {/* Sección que itera sobre las categorías de platos y los muestra en una lista */}
-      <div className="menu-sections">
-        {Object.entries(dishes).map(([category, items]) => (
-          <div key={category} style={{ marginBottom: '2.5rem' }}>
-            <h2 style={{ borderBottom: '1px solid var(--border-glass)', paddingBottom: '0.5rem', marginBottom: '1.5rem', color: 'var(--primary)' }}>
-              {category}
-            </h2>
-            <div className="dishes-list">
-              {items.map(dish => (
-                <DishItem key={dish.platoID} dish={dish} />
-              ))}
-            </div>
+      {error && (
+          <div style={{ 
+            background: 'rgba(239, 68, 68, 0.1)', 
+            color: '#ef4444', 
+            padding: '1rem', 
+            borderRadius: '12px', 
+            marginBottom: '2rem',
+            border: '1px solid rgba(239, 68, 68, 0.2)',
+            textAlign: 'center'
+          }}>
+            {error}
           </div>
-        ))}
-      </div>
+        )}
+
+      {restaurant ? (
+        <>
+          <div className="restaurant-header" style={{ marginBottom: '3rem' }}>
+            <h1 style={{ textAlign: 'left', marginBottom: '0.5rem' }}>{restaurant.restaurante}</h1>
+            <p style={{ color: '#94a3b8' }}>Barrio: {restaurant.barrio}</p>
+          </div>
+
+          <div className="menu-sections">
+            {Object.entries(dishes).length > 0 ? (
+              Object.entries(dishes).map(([category, items]) => (
+                <div key={category} style={{ marginBottom: '2.5rem' }}>
+                  <h2 style={{ borderBottom: '1px solid var(--border-glass)', paddingBottom: '0.5rem', marginBottom: '1.5rem', color: 'var(--primary)' }}>
+                    {category}
+                  </h2>
+                  <div className="dishes-list">
+                    {items.map(dish => (
+                      <DishItem key={dish.platoID} dish={dish} />
+                    ))}
+                  </div>
+                </div>
+              ))
+            ) : (
+              <p style={{ color: '#94a3b8' }}>No hay platos disponibles para este restaurante.</p>
+            )}
+          </div>
+        </>
+      ) : (
+        <div className="error-message" style={{ color: '#ef4444', padding: '2rem', textAlign: 'center' }}>
+          No pudimos encontrar la información de este restaurante.
+        </div>
+      )}
     </div>
   )
 }

@@ -26,7 +26,7 @@ const OrdersCarousel = () => {
   useEffect(() => {
     const fetchOrders = async () => {
       try {
-        const response = await axios.get(`${API_URL}/orders`, { timeout: 2000 })
+        const response = await axios.get(`${API_URL}/orders`, { timeout: 1000 })
         // Enriquecemos con imágenes
         const enriched = response.data.map((o, i) => ({
           ...o,
@@ -54,7 +54,7 @@ const OrdersCarousel = () => {
   const fetchOrderDetails = async (orderId) => {
     if (details[orderId]) return
     try {
-      const response = await axios.get(`${API_URL}/order/${orderId}/dishes`, { timeout: 2000 })
+      const response = await axios.get(`${API_URL}/order/${orderId}/dishes`, { timeout: 1000 })
       setDetails(prev => ({ ...prev, [orderId]: response.data }))
     } catch (error) {
       console.error('Error fetching order details:', error)
