@@ -7,6 +7,15 @@ import { staticOrders } from '../data/staticData'
 const API_URL = import.meta.env.VITE_API_URL;
 
 
+// Array de imágenes locales para ilustrar los pedidos con carga instantánea
+const orderImages = [
+  `${import.meta.env.BASE_URL}images/slide1.png`,
+  `${import.meta.env.BASE_URL}images/slide2.png`,
+  `${import.meta.env.BASE_URL}images/slide3.png`,
+  `${import.meta.env.BASE_URL}images/slide4.png`,
+  `${import.meta.env.BASE_URL}images/slide5.png`,
+]
+
 const Orders = () => {
   const [orders, setOrders] = useState([])
   const [expandedOrder, setExpandedOrder] = useState(null)
@@ -14,40 +23,29 @@ const Orders = () => {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
 
-  // Array de imágenes locales para ilustrar los pedidos con carga instantánea
-  const orderImages = [
-    `${import.meta.env.BASE_URL}images/slide1.png`,
-    `${import.meta.env.BASE_URL}images/slide2.png`,
-    `${import.meta.env.BASE_URL}images/slide3.png`,
-    `${import.meta.env.BASE_URL}images/slide4.png`,
-    `${import.meta.env.BASE_URL}images/slide5.png`,
-  ]
-
   useEffect(() => {
+    const fetchOrders = async () => {
+      try {
+        const response = await axios.get(`${API_URL}/orders`, { timeout: 800 })
+        const enrichedData = response.data.map((order, index) => ({
+          ...order,
+          imagen: orderImages[index % orderImages.length]
+        }))
+        setOrders(enrichedData)
+      } catch (error) {
+        console.info('Detalles del pedido no disponibles en modo demostración.')
+        setError('Sin conexión con el servidor. Mostrando pedidos de demostración.')
+        const enrichedStatic = staticOrders.map((o, i) => ({
+          ...o,
+          imagen: orderImages[i % orderImages.length]
+        }))
+        setOrders(enrichedStatic)
+      } finally {
+        setLoading(false)
+      }
+    }
     fetchOrders()
   }, [])
-
-  const fetchOrders = async () => {
-    try {
-      const response = await axios.get(`${API_URL}/orders`, { timeout: 800 })
-      // Enriquecemos los datos con una imagen aleatoria para cada pedido
-      const enrichedData = response.data.map((order, index) => ({
-        ...order,
-        imagen: orderImages[index % orderImages.length]
-      }))
-      setOrders(enrichedData)
-    } catch (error) {
-      console.error('Error fetching orders, usando datos estáticos:', error)
-      setError('No se pudo conectar con el servidor. Mostrando datos de prueba.')
-      const enrichedStatic = staticOrders.map((order, index) => ({
-        ...order,
-        imagen: orderImages[index % orderImages.length]
-      }))
-      setOrders(enrichedStatic)
-    } finally {
-      setLoading(false)
-    }
-  }
 
   // Alterna la visibilidad de los detalles de un pedido y carga sus platos si es necesario
   const toggleOrder = async (orderId) => {
@@ -63,7 +61,7 @@ const Orders = () => {
         const response = await axios.get(`${API_URL}/order/${orderId}/dishes`, { timeout: 800 })
         setOrderDetails(prev => ({ ...prev, [orderId]: response.data }))
       } catch (error) {
-        console.error('Error fetching order dishes:', error)
+        console.info('Platos del pedido no disponibles.')
       }
     }
   }

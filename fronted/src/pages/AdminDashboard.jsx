@@ -2,14 +2,13 @@
 import { useState, useEffect } from 'react'
 import axios from 'axios'
 import { Plus, Trash2, Edit2, Save, X } from 'lucide-react'
-import { staticRestaurants, staticCategories } from '../data/staticData'
+import { staticRestaurants } from '../data/staticData'
 
 const API_URL = import.meta.env.VITE_API_URL;
 
 
 const AdminDashboard = () => {
   const [restaurants, setRestaurants] = useState([])
-  const [categories, setCategories] = useState([])
   const [editingRes, setEditingRes] = useState(null)
   const [newRes, setNewRes] = useState({ restaurante: '', barrio: '' })
   const [loading, setLoading] = useState(true)
@@ -21,17 +20,12 @@ const AdminDashboard = () => {
 
   const fetchData = async () => {
     try {
-      const [resRes, catRes] = await Promise.all([
-        axios.get(`${API_URL}/restaurants`, { timeout: 800 }),
-        axios.get(`${API_URL}/categories`, { timeout: 800 })
-      ])
-      setRestaurants(resRes.data)
-      setCategories(catRes.data)
+      const response = await axios.get(`${API_URL}/restaurants`, { timeout: 800 })
+      setRestaurants(response.data)
     } catch (error) {
-      console.error('Error fetching data, usando datos estáticos:', error)
+      console.info('Admin: Backend no disponible, usando fallback.')
       setError('Error al conectar con la base de datos. Mostrando inventario de prueba.')
       setRestaurants(staticRestaurants)
-      setCategories(staticCategories)
     } finally {
       setLoading(false)
     }
@@ -46,7 +40,7 @@ const AdminDashboard = () => {
       setNewRes({ restaurante: '', barrio: '' })
       fetchData()
     } catch (error) {
-      console.error('Error adding restaurant:', error)
+      console.info('Error al añadir restaurante.')
       setError('No se pudo añadir el restaurante. El servidor no responde.')
       // Autolimpiar el error tras 5 segundos
       setTimeout(() => setError(null), 5000)
@@ -61,7 +55,7 @@ const AdminDashboard = () => {
       await axios.delete(`${API_URL}/restaurants/${id}`)
       fetchData()
     } catch (error) {
-      console.error('Error deleting restaurant:', error)
+      console.info('Error al borrar restaurante.')
       setError('No se puede eliminar en modo offline.')
       setTimeout(() => setError(null), 5000)
     }
@@ -74,7 +68,7 @@ const AdminDashboard = () => {
       setEditingRes(null)
       fetchData()
     } catch (error) {
-      console.error('Error updating restaurant:', error)
+      console.info('Error al actualizar restaurante.')
       setError('No se pueden guardar los cambios en modo offline.')
       setTimeout(() => setError(null), 5000)
     }
@@ -102,8 +96,9 @@ const AdminDashboard = () => {
         <h2 style={{ marginTop: 0 }}>Añadir Nuevo Restaurante</h2>
         <form onSubmit={handleAddRestaurant} style={{ display: 'grid', gridTemplateColumns: '1fr 1fr auto', gap: '1rem', alignItems: 'end' }}>
           <div>
-            <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.9rem' }}>Nombre</label>
+            <label htmlFor="res-name" style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.9rem' }}>Nombre</label>
             <input 
+              id="res-name"
               type="text" 
               value={newRes.restaurante} 
               onChange={(e) => setNewRes({...newRes, restaurante: e.target.value})}
@@ -112,8 +107,9 @@ const AdminDashboard = () => {
             />
           </div>
           <div>
-            <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.9rem' }}>Barrio</label>
+            <label htmlFor="res-neighborhood" style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.9rem' }}>Barrio</label>
             <input 
+              id="res-neighborhood"
               type="text" 
               value={newRes.barrio} 
               onChange={(e) => setNewRes({...newRes, barrio: e.target.value})}

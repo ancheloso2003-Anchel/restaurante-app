@@ -36,7 +36,7 @@ const RestaurantDetail = () => {
         }, {})
         setDishes(grouped)
       } catch (error) {
-        console.error('Error fetching data, usando datos estáticos:', error)
+        console.info('Detalle Restaurante: Backend no disponible.')
         setError('Sin conexión con el servidor. Mostrando menú de prueba.')
         
         const currentRes = staticRestaurants.find(r => r.restauranteID === parseInt(id))

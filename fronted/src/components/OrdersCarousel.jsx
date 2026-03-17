@@ -1,11 +1,19 @@
 // Carrusel dinámico que presenta los pedidos realizados de forma visual y detallada
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import axios from 'axios'
 import { ShoppingBag, ChevronLeft, ChevronRight, User, Utensils, Calendar, Receipt } from 'lucide-react'
 import { staticOrders } from '../data/staticData'
 
 const API_URL = import.meta.env.VITE_API_URL;
 
+
+const orderImages = [
+  `${import.meta.env.BASE_URL}images/slide1.png`,
+  `${import.meta.env.BASE_URL}images/slide2.png`,
+  `${import.meta.env.BASE_URL}images/slide3.png`,
+  `${import.meta.env.BASE_URL}images/slide4.png`,
+  `${import.meta.env.BASE_URL}images/slide5.png`,
+]
 
 const OrdersCarousel = () => {
   const [orders, setOrders] = useState([])
@@ -14,14 +22,15 @@ const OrdersCarousel = () => {
   const [details, setDetails] = useState({})
   const [error, setError] = useState(null)
 
-  // Imágenes representativas para los pedidos
-  const orderImages = [
-    `${import.meta.env.BASE_URL}images/slide1.png`,
-    `${import.meta.env.BASE_URL}images/slide2.png`,
-    `${import.meta.env.BASE_URL}images/slide3.png`,
-    `${import.meta.env.BASE_URL}images/slide4.png`,
-    `${import.meta.env.BASE_URL}images/slide5.png`,
-  ]
+  const fetchOrderDetails = useCallback(async (orderId) => {
+    if (details[orderId]) return
+    try {
+      const response = await axios.get(`${API_URL}/order/${orderId}/dishes`, { timeout: 800 })
+      setDetails(prev => ({ ...prev, [orderId]: response.data }))
+    } catch (error) {
+      console.info('Detalles del pedido no disponibles en modo demostración.')
+    }
+  }, [details])
 
   useEffect(() => {
     const fetchOrders = async () => {
@@ -37,7 +46,7 @@ const OrdersCarousel = () => {
           fetchOrderDetails(enriched[0].pedidoID)
         }
       } catch (error) {
-        console.error('Error fetching orders, usando datos estáticos:', error)
+        console.info('Pedidos (Carousel): Backend no disponible.')
         setError('Sin conexión con el servidor. Mostrando pedidos de demostración.')
         const enriched = staticOrders.map((o, i) => ({
           ...o,
@@ -49,17 +58,7 @@ const OrdersCarousel = () => {
       }
     }
     fetchOrders()
-  }, [])
-
-  const fetchOrderDetails = async (orderId) => {
-    if (details[orderId]) return
-    try {
-      const response = await axios.get(`${API_URL}/order/${orderId}/dishes`, { timeout: 800 })
-      setDetails(prev => ({ ...prev, [orderId]: response.data }))
-    } catch (error) {
-      console.error('Error fetching order details:', error)
-    }
-  }
+  }, [fetchOrderDetails])
 
   const nextSlide = () => {
     const nextIndex = (currentIndex + 1) % orders.length

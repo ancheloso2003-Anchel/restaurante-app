@@ -23,7 +23,7 @@ const SpecialMenuCreator = () => {
         const response = await axios.get(`${API_URL}/restaurants`, { timeout: 800 })
         setRestaurants(response.data)
       } catch (error) {
-        console.error('Error fetching restaurants, usando datos estáticos:', error)
+        console.info('Creador Menú: Backend no disponible.')
         setError('Error al cargar restaurantes. Usando catálogo fuera de línea.')
         setRestaurants(staticRestaurants)
       } finally {
@@ -55,7 +55,7 @@ const SpecialMenuCreator = () => {
       }, {})
       setCombinedMenu(grouped)
       } catch (error) {
-        console.error('Error generating menu, usando datos estáticos:', error)
+        console.info('Generador Menú: Fallo de red, usando datos de prueba.')
         setError('Error en la conexión. Menú generado con datos de prueba.')
         // Fallback: filtrar platos estáticos de los restaurantes seleccionados
         const allDishes = staticDishes.filter(d => selectedIds.includes(d.restauranteID))

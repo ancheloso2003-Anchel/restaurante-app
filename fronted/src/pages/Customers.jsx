@@ -7,25 +7,22 @@ import { staticCustomers } from '../data/staticData'
 const API_URL = import.meta.env.VITE_API_URL;
 
 
+// Arrays de fotos diversas según el género del cliente (se definen fuera para evitar recreación en cada render)
+const malePhotos = [
+  `${import.meta.env.BASE_URL}images/slide2.png`,
+  `${import.meta.env.BASE_URL}images/slide4.png`,
+]
+
+const femalePhotos = [
+  `${import.meta.env.BASE_URL}images/slide1.png`,
+  `${import.meta.env.BASE_URL}images/slide3.png`,
+  `${import.meta.env.BASE_URL}images/slide5.png`,
+]
+
 const Customers = () => {
   const [customers, setCustomers] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
-
-  // Arrays de fotos diversas según el género del cliente
-  const malePhotos = [
-    'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop',
-    'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&h=400&fit=crop',
-    'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&h=400&fit=crop',
-    'https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=400&h=400&fit=crop',
-  ]
-
-  const femalePhotos = [
-    'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400&h=400&fit=crop',
-    'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=400&h=400&fit=crop',
-    'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=400&h=400&fit=crop',
-    'https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?w=400&h=400&fit=crop',
-  ]
 
   useEffect(() => {
     const fetchCustomers = async () => {
@@ -48,7 +45,7 @@ const Customers = () => {
         })
         setCustomers(enrichedData)
       } catch (error) {
-        console.error('Error fetching customers, usando datos estáticos:', error)
+        console.info('Carga de clientes: Backend no disponible.')
         setError('No se pudo conectar con el servidor. Mostrando datos de prueba.')
         setCustomers(staticCustomers)
       } finally {
@@ -59,8 +56,8 @@ const Customers = () => {
   }, [])
 
   if (loading) return (
-    <div className="flex items-center justify-center min-h-[60vh]">
-      <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
+    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '60vh' }}>
+      <div className="loading">Cargando comunidad...</div>
     </div>
   )
 

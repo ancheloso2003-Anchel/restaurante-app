@@ -1,7 +1,7 @@
+/* global process */
 import fs from 'fs';
 import path from 'path';
 
-const searchRegex = /http:\/\/localhost:4000/g;
 const apiUrlLine = "const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:4000';\n";
 
 function processFile(filePath) {

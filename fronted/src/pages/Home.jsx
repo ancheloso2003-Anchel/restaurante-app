@@ -26,14 +26,14 @@ const Home = () => {
       id: 2,
       name: 'Carlos Mendoza',
       text: 'Increíble variedad de platos. Recomiendo totalmente el menú degustación.',
-      photo: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&h=200&fit=crop',
+      photo: `${import.meta.env.BASE_URL}images/slide2.png`,
       stars: 5
     },
     {
       id: 3,
       name: 'Sofía Martínez',
       text: 'El servicio al cliente es impecable. Volveré sin duda alguna.',
-      photo: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=200&h=200&fit=crop',
+      photo: `${import.meta.env.BASE_URL}images/slide3.png`,
       stars: 4
     }
   ]
@@ -45,7 +45,7 @@ const Home = () => {
         const response = await axios.get(`${API_URL}/restaurants`, { timeout: 800 })
         setRestaurants(response.data)
       } catch (error) {
-        console.error('Error fetching restaurants, usando datos estáticos:', error)
+        console.info('Backend no disponible, usando datos estáticos.')
         setError('No se pudo conectar con el servidor. Mostrando datos de prueba.')
         setRestaurants(staticRestaurants)
       } finally {

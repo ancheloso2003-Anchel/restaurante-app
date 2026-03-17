@@ -22,7 +22,7 @@ const AllDishes = () => {
         const response = await axios.get(`${API_URL}/dishes`, { timeout: 800 })
         setDishes(response.data)
       } catch (error) {
-        console.error('Error fetching dishes, usando datos estáticos:', error)
+        console.info('Catálogo Platos: Backend no disponible.')
         setError('No se pudo conectar con el servidor. Mostrando datos de prueba.')
         setDishes(staticDishes)
       } finally {
