@@ -2,13 +2,15 @@
 import { useState, useEffect } from 'react'
 import axios from 'axios'
 import { User, MapPin, Mail, Phone, Calendar } from 'lucide-react'
+import { staticCustomers } from '../data/staticData'
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:4000';
+const API_URL = import.meta.env.VITE_API_URL;
 
 
 const Customers = () => {
   const [customers, setCustomers] = useState([])
   const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(null)
 
   // Arrays de fotos diversas según el género del cliente
   const malePhotos = [
@@ -46,7 +48,9 @@ const Customers = () => {
         })
         setCustomers(enrichedData)
       } catch (error) {
-        console.error('Error fetching customers:', error)
+        console.error('Error fetching customers, usando datos estáticos:', error)
+        setError('No se pudo conectar con el servidor. Mostrando datos de prueba.')
+        setCustomers(staticCustomers)
       } finally {
         setLoading(false)
       }
@@ -72,6 +76,19 @@ const Customers = () => {
         }}>
           Nuestra Comunidad
         </h1>
+        {error && (
+          <div style={{ 
+            background: 'rgba(239, 68, 68, 0.1)', 
+            color: '#ef4444', 
+            padding: '1rem', 
+            borderRadius: '12px', 
+            marginBottom: '2rem',
+            border: '1px solid rgba(239, 68, 68, 0.2)',
+            display: 'inline-block'
+          }}>
+            {error}
+          </div>
+        )}
         <p style={{ color: '#94a3b8', fontSize: '1.25rem', maxWidth: '600px', margin: '0 auto', lineHeight: '1.6' }}>
           Conoce a las personas que hacen de nuestra plataforma un lugar especial y gourmet.
         </p>

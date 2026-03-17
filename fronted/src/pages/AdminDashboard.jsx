@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react'
 import axios from 'axios'
 import { Plus, Trash2, Edit2, Save, X } from 'lucide-react'
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:4000';
+const API_URL = import.meta.env.VITE_API_URL;
 
 
 const AdminDashboard = () => {
@@ -12,6 +12,7 @@ const AdminDashboard = () => {
   const [editingRes, setEditingRes] = useState(null)
   const [newRes, setNewRes] = useState({ restaurante: '', barrio: '' })
   const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(null)
 
   useEffect(() => {
     fetchData()
@@ -27,6 +28,7 @@ const AdminDashboard = () => {
       setCategories(catRes.data)
     } catch (error) {
       console.error('Error fetching data:', error)
+      setError('Error al conectar con la base de datos. Los cambios no se guardarán.')
     } finally {
       setLoading(false)
     }
@@ -70,6 +72,18 @@ const AdminDashboard = () => {
   return (
     <div className="admin-container" style={{ textAlign: 'left' }}>
       <h1>Panel de Administración</h1>
+      {error && (
+        <div style={{ 
+          background: 'rgba(239, 68, 68, 0.1)', 
+          color: '#ef4444', 
+          padding: '1rem', 
+          borderRadius: '12px', 
+          marginBottom: '2rem',
+          border: '1px solid rgba(239, 68, 68, 0.2)'
+        }}>
+          {error}
+        </div>
+      )}
       
       <div className="glass-card" style={{ marginBottom: '3rem' }}>
         <h2 style={{ marginTop: 0 }}>Añadir Nuevo Restaurante</h2>

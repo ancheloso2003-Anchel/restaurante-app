@@ -2,8 +2,9 @@ import { useState, useEffect } from 'react'
 import axios from 'axios'
 import { ShoppingBag, Calendar, User, Utensils, ChevronDown, ChevronUp } from 'lucide-react'
 import OrdersCarousel from '../components/OrdersCarousel'
+import { staticOrders } from '../data/staticData'
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:4000';
+const API_URL = import.meta.env.VITE_API_URL;
 
 
 const Orders = () => {
@@ -11,6 +12,7 @@ const Orders = () => {
   const [expandedOrder, setExpandedOrder] = useState(null)
   const [orderDetails, setOrderDetails] = useState({})
   const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(null)
 
   // Array de imágenes de platos reales para ilustrar los pedidos
   const orderImages = [
@@ -35,7 +37,13 @@ const Orders = () => {
       }))
       setOrders(enrichedData)
     } catch (error) {
-      console.error('Error fetching orders:', error)
+      console.error('Error fetching orders, usando datos estáticos:', error)
+      setError('No se pudo conectar con el servidor. Mostrando datos de prueba.')
+      const enrichedStatic = staticOrders.map((order, index) => ({
+        ...order,
+        imagen: orderImages[index % orderImages.length]
+      }))
+      setOrders(enrichedStatic)
     } finally {
       setLoading(false)
     }
@@ -66,6 +74,19 @@ const Orders = () => {
     <div className="orders-container" style={{ textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
       <header className="animate-fade-in-up" style={{ marginBottom: '5rem' }}>
         <h1>Historial de Pedidos</h1>
+        {error && (
+          <div style={{ 
+            background: 'rgba(239, 68, 68, 0.1)', 
+            color: '#ef4444', 
+            padding: '1rem', 
+            borderRadius: '12px', 
+            marginBottom: '2rem',
+            border: '1px solid rgba(239, 68, 68, 0.2)',
+            display: 'inline-block'
+          }}>
+            {error}
+          </div>
+        )}
         <p style={{ color: '#94a3b8', marginBottom: '4rem' }}>Gestiona y visualiza todas tus transacciones gastronómicas</p>
         
         {/* Sección Hero: Carrusel destacado de pedidos recientes */}
@@ -127,7 +148,9 @@ const Orders = () => {
                 <div className="animate-fade-in-up" style={{ padding: '2.5rem', borderTop: '1px solid var(--border-glass)', background: 'rgba(255, 255, 255, 0.02)' }}>
                   {/* Detalle expandible con animaciones de entrada laterales */}
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
-                    <h4 style={{ margin: 0, color: 'var(--primary)', fontSize: '1.25rem', fontWeight: '800' }}>Detalle de Consumición</h4>
+                    <h4 style={{ margin: 0, color: 'var(--primary)', fontSize: '1.25rem', fontWeight: '800' }}>
+                      Detalle de Pedido: {order.nombre} {order.apellido1}
+                    </h4>
                     <div style={{ display: 'flex', gap: '8px' }}>
                       <span style={{ fontSize: '0.75rem', background: 'rgba(16, 185, 129, 0.1)', color: 'var(--primary)', padding: '6px 16px', borderRadius: '99px', fontWeight: '700', border: '1px solid rgba(16, 185, 129, 0.2)' }}>PAGADO</span>
                       <span style={{ fontSize: '0.75rem', background: 'rgba(59, 130, 246, 0.1)', color: '#3b82f6', padding: '6px 16px', borderRadius: '99px', fontWeight: '700', border: '1px solid rgba(59, 130, 246, 0.2)' }}>DOMICILIO</span>

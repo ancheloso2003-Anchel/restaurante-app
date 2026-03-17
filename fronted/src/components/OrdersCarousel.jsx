@@ -2,8 +2,9 @@
 import { useState, useEffect } from 'react'
 import axios from 'axios'
 import { ShoppingBag, ChevronLeft, ChevronRight, User, Utensils, Calendar, Receipt } from 'lucide-react'
+import { staticOrders } from '../data/staticData'
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:4000';
+const API_URL = import.meta.env.VITE_API_URL;
 
 
 const OrdersCarousel = () => {
@@ -11,6 +12,7 @@ const OrdersCarousel = () => {
   const [currentIndex, setCurrentIndex] = useState(0)
   const [loading, setLoading] = useState(true)
   const [details, setDetails] = useState({})
+  const [error, setError] = useState(null)
 
   // Imágenes representativas para los pedidos
   const orderImages = [
@@ -35,7 +37,13 @@ const OrdersCarousel = () => {
           fetchOrderDetails(enriched[0].pedidoID)
         }
       } catch (error) {
-        console.error('Error fetching orders:', error)
+        console.error('Error fetching orders, usando datos estáticos:', error)
+        setError('Sin conexión con el servidor. Mostrando pedidos de demostración.')
+        const enriched = staticOrders.map((o, i) => ({
+          ...o,
+          imagen: orderImages[i % orderImages.length]
+        }))
+        setOrders(enriched)
       } finally {
         setLoading(false)
       }
@@ -160,6 +168,11 @@ const OrdersCarousel = () => {
             <h4 style={{ margin: '0 0 1.5rem 0', display: 'flex', alignItems: 'center', gap: '10px', color: 'var(--primary)', textTransform: 'uppercase', letterSpacing: '2px', fontSize: '0.8rem', fontWeight: '800' }}>
               <Receipt size={18} /> Artículos del Pedido
             </h4>
+            {error && (
+              <div style={{ color: '#ef4444', fontSize: '0.75rem', marginBottom: '1rem', background: 'rgba(239, 68, 68, 0.05)', padding: '8px', borderRadius: '8px', border: '1px solid rgba(239, 68, 68, 0.1)' }}>
+                {error}
+              </div>
+            )}
             <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
               {currentDetails.map((item, i) => (
                 <div key={i} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>

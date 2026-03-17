@@ -5,7 +5,7 @@ import axios from 'axios'
 import DishItem from '../components/DishItem'
 import { ChevronLeft } from 'lucide-react'
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:4000';
+const API_URL = import.meta.env.VITE_API_URL;
 
 
 const RestaurantDetail = () => {
@@ -13,6 +13,7 @@ const RestaurantDetail = () => {
   const [restaurant, setRestaurant] = useState(null)
   const [dishes, setDishes] = useState([])
   const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(null)
 
   useEffect(() => {
     // Función asíncrona para obtener los detalles del restaurante y su menú desde la API
@@ -35,6 +36,7 @@ const RestaurantDetail = () => {
         setDishes(grouped)
       } catch (error) {
         console.error('Error fetching data:', error)
+        setError('No se pudo cargar la información del restaurante.')
       } finally {
         setLoading(false)
       }
@@ -43,6 +45,7 @@ const RestaurantDetail = () => {
   }, [id])
 
   if (loading) return <div className="loading">Cargando menú...</div>
+  if (error) return <div className="error-message" style={{ color: '#ef4444', padding: '2rem' }}>{error}</div>
   if (!restaurant) return <div>Restaurante no encontrado</div>
 
   // Renderizado principal del componente con diseño receptivo y navegación de vuelta

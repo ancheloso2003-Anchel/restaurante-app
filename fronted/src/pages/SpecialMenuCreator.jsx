@@ -4,8 +4,9 @@ import axios from 'axios'
 import DishItem from '../components/DishItem'
 import SpecialCarousel from '../components/SpecialCarousel'
 import { Sparkles, Check, ArrowRight, RotateCcw } from 'lucide-react'
+import { staticRestaurants, staticDishes } from '../data/staticData'
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:4000';
+const API_URL = import.meta.env.VITE_API_URL;
 
 
 const SpecialMenuCreator = () => {
@@ -13,6 +14,7 @@ const SpecialMenuCreator = () => {
   const [selectedIds, setSelectedIds] = useState([])
   const [combinedMenu, setCombinedMenu] = useState(null)
   const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(null)
 
   // Fetch initial restaurant list on component mount
   useEffect(() => {
@@ -21,7 +23,9 @@ const SpecialMenuCreator = () => {
         const response = await axios.get(`${API_URL}/restaurants`)
         setRestaurants(response.data)
       } catch (error) {
-        console.error('Error fetching restaurants:', error)
+        console.error('Error fetching restaurants, usando datos estáticos:', error)
+        setError('Error al cargar restaurantes. Usando catálogo fuera de línea.')
+        setRestaurants(staticRestaurants)
       } finally {
         setLoading(false)
       }
@@ -43,19 +47,25 @@ const SpecialMenuCreator = () => {
     try {
       const requests = selectedIds.map(id => axios.get(`${API_URL}/restaurants/${id}/dishes`))
       const results = await Promise.all(requests)
-      
       const allDishes = results.flatMap(res => res.data)
-      
       const grouped = allDishes.reduce((acc, dish) => {
         if (!acc[dish.categoria]) acc[dish.categoria] = []
         acc[dish.categoria].push(dish)
         return acc
       }, {})
-      
       setCombinedMenu(grouped)
-    } catch (error) {
-      console.error('Error generating combined menu:', error)
-    } finally {
+      } catch (error) {
+        console.error('Error generating menu, usando datos estáticos:', error)
+        setError('Error en la conexión. Menú generado con datos de prueba.')
+        // Fallback: filtrar platos estáticos de los restaurantes seleccionados
+        const allDishes = staticDishes.filter(d => selectedIds.includes(d.restauranteID))
+        const grouped = allDishes.reduce((acc, dish) => {
+          if (!acc[dish.categoria]) acc[dish.categoria] = []
+          acc[dish.categoria].push(dish)
+          return acc
+        }, {})
+        setCombinedMenu(grouped)
+      } finally {
       setLoading(false)
     }
   }
@@ -73,6 +83,19 @@ const SpecialMenuCreator = () => {
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '3rem' }}>
               <div>
                 <h1 style={{ margin: 0, fontSize: '2.5rem' }}>Selecciona Restaurante</h1>
+                {error && (
+                  <div style={{ 
+                    background: 'rgba(239, 68, 68, 0.1)', 
+                    color: '#ef4444', 
+                    padding: '0.8rem', 
+                    borderRadius: '10px', 
+                    marginTop: '1rem',
+                    border: '1px solid rgba(239, 68, 68, 0.2)',
+                    fontSize: '0.9rem'
+                  }}>
+                    {error}
+                  </div>
+                )}
                 <p style={{ color: '#94a3b8', margin: '0.5rem 0 0 0' }}>Elige los establecimientos para fusionar sus cartas</p>
               </div>
               {selectedIds.length > 0 && (

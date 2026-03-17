@@ -4,13 +4,14 @@ import axios from 'axios'
 import RestaurantCard from '../components/RestaurantCard'
 import FeaturedCarousel from '../components/FeaturedCarousel'
 import { Quote, Star } from 'lucide-react'
+import { staticRestaurants } from '../data/staticData'
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:4000';
-
+const API_URL = import.meta.env.VITE_API_URL;
 
 const Home = () => {
   const [restaurants, setRestaurants] = useState([])
   const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(null)
 
   // Datos estáticos de testimonios para mostrar la satisfacción de los clientes
   const testimonials = [
@@ -44,7 +45,9 @@ const Home = () => {
         const response = await axios.get(`${API_URL}/restaurants`)
         setRestaurants(response.data)
       } catch (error) {
-        console.error('Error fetching restaurants:', error)
+        console.error('Error fetching restaurants, usando datos estáticos:', error)
+        setError('No se pudo conectar con el servidor. Mostrando datos de prueba.')
+        setRestaurants(staticRestaurants)
       } finally {
         setLoading(false)
       }
@@ -60,6 +63,21 @@ const Home = () => {
       
       <section style={{ padding: '4rem 0' }}>
         <h1 style={{ textAlign: 'center' }}>Nuestros Restaurantes</h1>
+        {error && (
+          <div style={{ 
+            background: 'rgba(239, 68, 68, 0.1)', 
+            color: '#ef4444', 
+            padding: '1rem', 
+            borderRadius: '12px', 
+            marginBottom: '2rem',
+            border: '1px solid rgba(239, 68, 68, 0.2)',
+            textAlign: 'center',
+            maxWidth: '600px',
+            margin: '0 auto 2rem auto'
+          }}>
+            {error}
+          </div>
+        )}
         <p style={{ color: '#94a3b8', marginBottom: '3rem', textAlign: 'center' }}>Descubre la mejor gastronomía de la ciudad</p>
         
         <div className="grid-container">

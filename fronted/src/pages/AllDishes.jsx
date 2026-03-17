@@ -4,14 +4,16 @@ import axios from 'axios'
 import DishItem from '../components/DishItem'
 import DishesCarousel from '../components/DishesCarousel'
 import { Search } from 'lucide-react'
+import { staticDishes } from '../data/staticData'
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:4000';
+const API_URL = import.meta.env.VITE_API_URL;
 
 
 const AllDishes = () => {
   const [dishes, setDishes] = useState([])
   const [searchTerm, setSearchTerm] = useState('')
   const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(null)
 
   // Efecto para cargar todos los platos disponibles al montar el componente
   useEffect(() => {
@@ -20,7 +22,9 @@ const AllDishes = () => {
         const response = await axios.get(`${API_URL}/dishes`)
         setDishes(response.data)
       } catch (error) {
-        console.error('Error fetching dishes:', error)
+        console.error('Error fetching dishes, usando datos estáticos:', error)
+        setError('No se pudo conectar con el servidor. Mostrando datos de prueba.')
+        setDishes(staticDishes)
       } finally {
         setLoading(false)
       }
@@ -39,6 +43,19 @@ const AllDishes = () => {
     <div className="all-dishes-container" style={{ textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
       <DishesCarousel />
       <h1>Catálogo de Platos</h1>
+      {error && (
+        <div style={{ 
+          background: 'rgba(239, 68, 68, 0.1)', 
+          color: '#ef4444', 
+          padding: '1rem', 
+          borderRadius: '12px', 
+          marginBottom: '2rem',
+          border: '1px solid rgba(239, 68, 68, 0.2)',
+          display: 'inline-block'
+        }}>
+          {error}
+        </div>
+      )}
       <p style={{ color: '#94a3b8', marginBottom: '2rem' }}>Explora todas las opciones gastronómicas de nuestros restaurantes</p>
 
       <div style={{ position: 'relative', marginBottom: '3rem', maxWidth: '500px', width: '100%' }}>

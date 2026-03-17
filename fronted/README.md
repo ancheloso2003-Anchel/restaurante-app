@@ -1,16 +1,49 @@
-# React + Vite
+# Frontend - Restaurante App
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Esta es la parte del cliente (frontend) de la Aplicación de Restaurantes, desarrollada con **React** y **Vite**.
 
-Currently, two official plugins are available:
+## 🛠️ Tecnologías Utilizadas
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- **React 19**: Biblioteca para la interfaz de usuario.
+- **Vite**: Herramienta de construcción rápida y servidor de desarrollo.
+- **Axios**: Para realizar peticiones HTTP a la API.
+- **Lucide React**: Biblioteca de iconos modernos.
+- **CSS Vanilla**: Estilos personalizados con un enfoque premium y moderno (Midnight Emerald).
 
-## React Compiler
+## 🚀 Instalación y Ejecución
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+1. Entra en la carpeta del frontend:
+   ```bash
+   cd fronted
+   ```
 
-## Expanding the ESLint configuration
+2. Instala las dependencias:
+   ```bash
+   npm install
+   ```
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+3. Crea un archivo `.env` basado en el entorno necesario:
+   - Para desarrollo local: configura `VITE_API_URL=http://localhost:4000`
+   - Para producción: configura la URL de la API correspondiente.
+
+4. Lanza el servidor de desarrollo:
+   ```bash
+   npm run dev
+   ```
+
+## 📦 Despliegue
+
+El proyecto está configurado para desplegarse en **GitHub Pages**. Para desplegar una nueva versión:
+
+```bash
+npm run deploy
+```
+
+La URL de despliegue es: [https://ancheloso2003-Anchel.github.io/restaurante-app](https://ancheloso2003-Anchel.github.io/restaurante-app)
+
+## 📁 Estructura del Proyecto
+
+- `src/components`: Componentes reutilizables (Carousels, DishItem, etc.).
+- `src/pages`: Vistas principales de la aplicación (Home, Orders, Customers, etc.).
+- `src/data`: Datos estáticos para fallback cuando la API no está disponible.
+- `src/index.css`: Sistema de diseño global y temas.
