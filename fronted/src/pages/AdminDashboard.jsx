@@ -21,8 +21,8 @@ const AdminDashboard = () => {
   const fetchData = async () => {
     try {
       const [resRes, catRes] = await Promise.all([
-        axios.get(`${API_URL}/restaurants`, { timeout: 1000 }),
-        axios.get(`${API_URL}/categories`, { timeout: 1000 })
+        axios.get(`${API_URL}/restaurants`, { timeout: 800 }),
+        axios.get(`${API_URL}/categories`, { timeout: 800 })
       ])
       setRestaurants(resRes.data)
       setCategories(catRes.data)

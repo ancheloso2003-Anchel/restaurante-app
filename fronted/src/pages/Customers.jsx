@@ -30,7 +30,7 @@ const Customers = () => {
   useEffect(() => {
     const fetchCustomers = async () => {
       try {
-        const response = await axios.get(`${API_URL}/customers`, { timeout: 1000 })
+        const response = await axios.get(`${API_URL}/customers`, { timeout: 800 })
         // Asignamos una foto coherente con el género (H/M) usando dos contadores separados
         let mCount = 0
         let fCount = 0

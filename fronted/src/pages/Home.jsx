@@ -42,7 +42,7 @@ const Home = () => {
   useEffect(() => {
     const fetchRestaurants = async () => {
       try {
-        const response = await axios.get(`${API_URL}/restaurants`, { timeout: 1000 })
+        const response = await axios.get(`${API_URL}/restaurants`, { timeout: 800 })
         setRestaurants(response.data)
       } catch (error) {
         console.error('Error fetching restaurants, usando datos estáticos:', error)
