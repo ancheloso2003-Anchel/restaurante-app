@@ -26,7 +26,7 @@ const Orders = () => {
   useEffect(() => {
     const fetchOrders = async () => {
       try {
-        const response = await axios.get(`${API_URL}/orders`, { timeout: 800 })
+        const response = await axios.get(`${API_URL}/orders`, { timeout: 10000 })
         const enrichedData = response.data.map((order, index) => ({
           ...order,
           imagen: orderImages[index % orderImages.length]
@@ -58,7 +58,7 @@ const Orders = () => {
     
     if (!orderDetails[orderId]) {
       try {
-        const response = await axios.get(`${API_URL}/order/${orderId}/dishes`, { timeout: 800 })
+        const response = await axios.get(`${API_URL}/order/${orderId}/dishes`, { timeout: 10000 })
         setOrderDetails(prev => ({ ...prev, [orderId]: response.data }))
       } catch (error) {
         console.info('Platos del pedido no disponibles.')

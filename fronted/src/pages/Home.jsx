@@ -42,7 +42,7 @@ const Home = () => {
   useEffect(() => {
     const fetchRestaurants = async () => {
       try {
-        const response = await axios.get(`${API_URL}/restaurants`, { timeout: 800 })
+        const response = await axios.get(`${API_URL}/restaurants`, { timeout: 10000 })
         setRestaurants(response.data)
       } catch (error) {
         console.info('Backend no disponible, usando datos estáticos.')

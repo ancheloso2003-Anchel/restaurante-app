@@ -21,8 +21,8 @@ const RestaurantDetail = () => {
     const fetchData = async () => {
       try {
         const [resRes, dishesRes] = await Promise.all([
-          axios.get(`${API_URL}/restaurants`, { timeout: 800 }),
-          axios.get(`${API_URL}/restaurants/${id}/dishes`, { timeout: 800 })
+          axios.get(`${API_URL}/restaurants`, { timeout: 10000 }),
+          axios.get(`${API_URL}/restaurants/${id}/dishes`, { timeout: 10000 })
         ])
         
         const currentRes = resRes.data.find(r => r.restauranteID === parseInt(id))

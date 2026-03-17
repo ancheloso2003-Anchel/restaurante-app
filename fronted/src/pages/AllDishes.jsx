@@ -19,7 +19,7 @@ const AllDishes = () => {
   useEffect(() => {
     const fetchDishes = async () => {
       try {
-        const response = await axios.get(`${API_URL}/dishes`, { timeout: 800 })
+        const response = await axios.get(`${API_URL}/dishes`, { timeout: 10000 })
         setDishes(response.data)
       } catch (error) {
         console.info('Catálogo Platos: Backend no disponible.')

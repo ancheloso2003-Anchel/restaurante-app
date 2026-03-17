@@ -25,7 +25,7 @@ const OrdersCarousel = () => {
   const fetchOrderDetails = useCallback(async (orderId) => {
     if (details[orderId]) return
     try {
-      const response = await axios.get(`${API_URL}/order/${orderId}/dishes`, { timeout: 800 })
+      const response = await axios.get(`${API_URL}/order/${orderId}/dishes`, { timeout: 10000 })
       setDetails(prev => ({ ...prev, [orderId]: response.data }))
     } catch (error) {
       console.info('Detalles del pedido no disponibles en modo demostración.')
@@ -35,7 +35,7 @@ const OrdersCarousel = () => {
   useEffect(() => {
     const fetchOrders = async () => {
       try {
-        const response = await axios.get(`${API_URL}/orders`, { timeout: 800 })
+        const response = await axios.get(`${API_URL}/orders`, { timeout: 10000 })
         // Enriquecemos con imágenes
         const enriched = response.data.map((o, i) => ({
           ...o,
