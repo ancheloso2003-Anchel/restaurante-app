@@ -3,17 +3,17 @@ import { useState, useEffect } from 'react'
 
 const slides = [
   {
-    image: '/images/slide4.png',
+    image: `${import.meta.env.BASE_URL}images/slide4.png`,
     title: 'Tapas de Tradición',
     description: 'Nuestras tapas combinan la esencia de siempre con técnicas culinarias de vanguardia.'
   },
   {
-    image: '/images/slide5.png',
+    image: `${import.meta.env.BASE_URL}images/slide5.png`,
     title: 'Carnes a la Brasa',
     description: 'Cortes seleccionados de la mejor calidad, cocinados al punto perfecto para resaltar su sabor.'
   },
   {
-    image: '/images/slide2.png',
+    image: `${import.meta.env.BASE_URL}images/slide2.png`,
     title: 'Pizzas de Autor',
     description: 'Masa madre de larga fermentación e ingredientes D.O. para una experiencia italiana auténtica.'
   }

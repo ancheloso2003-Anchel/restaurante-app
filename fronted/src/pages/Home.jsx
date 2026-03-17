@@ -19,7 +19,7 @@ const Home = () => {
       id: 1,
       name: 'Elena Rodríguez',
       text: 'La mejor experiencia gastronómica que he tenido. La reserva fue súper sencilla.',
-      photo: '/assets/customers/customer1.png',
+      photo: `${import.meta.env.BASE_URL}assets/customers/customer1.png`,
       stars: 5
     },
     {
@@ -42,7 +42,7 @@ const Home = () => {
   useEffect(() => {
     const fetchRestaurants = async () => {
       try {
-        const response = await axios.get(`${API_URL}/restaurants`)
+        const response = await axios.get(`${API_URL}/restaurants`, { timeout: 2000 })
         setRestaurants(response.data)
       } catch (error) {
         console.error('Error fetching restaurants, usando datos estáticos:', error)

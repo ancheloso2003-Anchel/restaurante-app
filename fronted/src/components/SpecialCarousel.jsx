@@ -8,21 +8,21 @@ import { Sparkles, ChevronRight, ChevronLeft, Info } from 'lucide-react'
  */
 const slides = [
   {
-    image: '/images/slide4.png',
+    image: `${import.meta.env.BASE_URL}images/slide4.png`,
     title: 'Gourmet Fusion',
     badge: 'ESTRELLA',
     color: '#10b981',
     description: 'La combinación perfecta entre la técnica tradicional y la creatividad moderna.'
   },
   {
-    image: '/images/slide1.png',
+    image: `${import.meta.env.BASE_URL}images/slide1.png`,
     title: 'Selección Eco',
     badge: 'FRESCO',
     color: '#34d399',
     description: 'Ingredientes de proximidad seleccionados diariamente para garantizar la máxima calidad.'
   },
   {
-    image: '/images/slide5.png',
+    image: `${import.meta.env.BASE_URL}images/slide5.png`,
     title: 'Bocados de Autor',
     badge: 'NUEVO',
     color: '#059669',

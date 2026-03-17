@@ -3,17 +3,17 @@ import { useState, useEffect } from 'react'
 
 const slides = [
   {
-    image: '/images/slide1.png',
+    image: `${import.meta.env.BASE_URL}images/slide1.png`,
     title: 'Sabores que Inspiran',
     description: 'Descubre nuestra selección de ensaladas gourmet con los ingredientes más frescos de la huerta.'
   },
   {
-    image: '/images/slide2.png',
+    image: `${import.meta.env.BASE_URL}images/slide2.png`,
     title: 'Tradición al Horno',
     description: 'Pizzas artesanas cocinadas en horno de leña siguiendo la receta tradicional italiana.'
   },
   {
-    image: '/images/slide3.png',
+    image: `${import.meta.env.BASE_URL}images/slide3.png`,
     title: 'Dulces Momentos',
     description: 'Termina tu experiencia con nuestros postres de autor, diseñados para sorprender a tu paladar.'
   }

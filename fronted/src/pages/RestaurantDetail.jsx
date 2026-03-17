@@ -4,6 +4,7 @@ import { useParams, Link } from 'react-router-dom'
 import axios from 'axios'
 import DishItem from '../components/DishItem'
 import { ChevronLeft } from 'lucide-react'
+import { staticRestaurants, staticDishes } from '../data/staticData'
 
 const API_URL = import.meta.env.VITE_API_URL;
 
@@ -20,8 +21,8 @@ const RestaurantDetail = () => {
     const fetchData = async () => {
       try {
         const [resRes, dishesRes] = await Promise.all([
-          axios.get(`${API_URL}/restaurants`),
-          axios.get(`${API_URL}/restaurants/${id}/dishes`)
+          axios.get(`${API_URL}/restaurants`, { timeout: 2000 }),
+          axios.get(`${API_URL}/restaurants/${id}/dishes`, { timeout: 2000 })
         ])
         
         const currentRes = resRes.data.find(r => r.restauranteID === parseInt(id))
@@ -35,8 +36,19 @@ const RestaurantDetail = () => {
         }, {})
         setDishes(grouped)
       } catch (error) {
-        console.error('Error fetching data:', error)
-        setError('No se pudo cargar la información del restaurante.')
+        console.error('Error fetching data, usando datos estáticos:', error)
+        setError('Sin conexión con el servidor. Mostrando menú de prueba.')
+        
+        const currentRes = staticRestaurants.find(r => r.restauranteID === parseInt(id))
+        setRestaurant(currentRes)
+        
+        const filteredDishes = staticDishes.filter(d => d.restauranteID === parseInt(id))
+        const grouped = filteredDishes.reduce((acc, dish) => {
+          if (!acc[dish.categoria]) acc[dish.categoria] = []
+          acc[dish.categoria].push(dish)
+          return acc
+        }, {})
+        setDishes(grouped)
       } finally {
         setLoading(false)
       }

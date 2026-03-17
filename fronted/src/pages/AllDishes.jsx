@@ -19,7 +19,7 @@ const AllDishes = () => {
   useEffect(() => {
     const fetchDishes = async () => {
       try {
-        const response = await axios.get(`${API_URL}/dishes`)
+        const response = await axios.get(`${API_URL}/dishes`, { timeout: 2000 })
         setDishes(response.data)
       } catch (error) {
         console.error('Error fetching dishes, usando datos estáticos:', error)

@@ -20,7 +20,7 @@ const SpecialMenuCreator = () => {
   useEffect(() => {
     const fetchRestaurants = async () => {
       try {
-        const response = await axios.get(`${API_URL}/restaurants`)
+        const response = await axios.get(`${API_URL}/restaurants`, { timeout: 2000 })
         setRestaurants(response.data)
       } catch (error) {
         console.error('Error fetching restaurants, usando datos estáticos:', error)
@@ -45,7 +45,7 @@ const SpecialMenuCreator = () => {
     if (selectedIds.length === 0) return
     setLoading(true)
     try {
-      const requests = selectedIds.map(id => axios.get(`${API_URL}/restaurants/${id}/dishes`))
+      const requests = selectedIds.map(id => axios.get(`${API_URL}/restaurants/${id}/dishes`, { timeout: 2000 }))
       const results = await Promise.all(requests)
       const allDishes = results.flatMap(res => res.data)
       const grouped = allDishes.reduce((acc, dish) => {

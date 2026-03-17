@@ -16,17 +16,17 @@ const OrdersCarousel = () => {
 
   // Imágenes representativas para los pedidos
   const orderImages = [
-    'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=600&h=600&fit=crop',
-    'https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=600&h=600&fit=crop',
-    'https://images.unsplash.com/photo-1567620905732-2d1ec7bb7445?w=600&h=600&fit=crop',
-    'https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=600&h=600&fit=crop',
-    'https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?w=600&h=600&fit=crop',
+    `${import.meta.env.BASE_URL}images/slide1.png`,
+    `${import.meta.env.BASE_URL}images/slide2.png`,
+    `${import.meta.env.BASE_URL}images/slide3.png`,
+    `${import.meta.env.BASE_URL}images/slide4.png`,
+    `${import.meta.env.BASE_URL}images/slide5.png`,
   ]
 
   useEffect(() => {
     const fetchOrders = async () => {
       try {
-        const response = await axios.get(`${API_URL}/orders`)
+        const response = await axios.get(`${API_URL}/orders`, { timeout: 2000 })
         // Enriquecemos con imágenes
         const enriched = response.data.map((o, i) => ({
           ...o,
@@ -54,7 +54,7 @@ const OrdersCarousel = () => {
   const fetchOrderDetails = async (orderId) => {
     if (details[orderId]) return
     try {
-      const response = await axios.get(`${API_URL}/order/${orderId}/dishes`)
+      const response = await axios.get(`${API_URL}/order/${orderId}/dishes`, { timeout: 2000 })
       setDetails(prev => ({ ...prev, [orderId]: response.data }))
     } catch (error) {
       console.error('Error fetching order details:', error)
