@@ -14,13 +14,13 @@ const Orders = () => {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
 
-  // Array de imágenes de platos reales para ilustrar los pedidos
+  // Array de imágenes locales para ilustrar los pedidos con carga instantánea
   const orderImages = [
-    'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=400&h=400&fit=crop',
-    'https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=400&h=400&fit=crop',
-    'https://images.unsplash.com/photo-1567620905732-2d1ec7bb7445?w=400&h=400&fit=crop',
-    'https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=400&h=400&fit=crop',
-    'https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?w=400&h=400&fit=crop',
+    `${import.meta.env.BASE_URL}images/slide1.png`,
+    `${import.meta.env.BASE_URL}images/slide2.png`,
+    `${import.meta.env.BASE_URL}images/slide3.png`,
+    `${import.meta.env.BASE_URL}images/slide4.png`,
+    `${import.meta.env.BASE_URL}images/slide5.png`,
   ]
 
   useEffect(() => {

@@ -13,13 +13,13 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 
-  /* Theme Accents (Neon Violet) */
-  --primary: #8b5cf6;        /* Violet 500 */
-  --primary-hover: #7c3aed;  /* Violet 600 */
-  --secondary: #ec4899;      /* Pink 500 */
-  --bg-card: rgba(15, 23, 42, 0.6);   /* Frosted Navy */
-  --border-glass: rgba(139, 92, 246, 0.1);
-  --accent-glow: rgba(139, 92, 246, 0.2);
+  /* Theme Accents (Midnight Emerald) */
+  --primary: #10b981;        /* Emerald 500 */
+  --primary-hover: #059669;  /* Emerald 600 */
+  --secondary: #3b82f6;      /* Blue 500 */
+  --bg-card: rgba(15, 23, 42, 0.4);   /* Deep Navy */
+  --border-glass: rgba(16, 185, 129, 0.1);
+  --accent-glow: rgba(16, 185, 129, 0.15);
 }
 
 /* --- GLOBAL LAYOUT --- */
@@ -58,7 +58,7 @@ a:hover {
 h1 {
   font-size: 4rem;
   line-height: 1;
-  background: linear-gradient(to bottom right, #fff, #8b5cf6);
+  background: linear-gradient(to bottom right, #fff, var(--primary));
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -146,7 +146,7 @@ button:hover {
   position: relative;
 }
 
-.nav-link.active, .nav-link :hover {
+.nav-link.active, .nav-link:hover {
   color: var(--primary);
 }
 
@@ -359,6 +359,16 @@ input:focus {
 @keyframes pulse {
   0%, 100% { opacity: 0.4; filter: blur(2px); }
   50% { opacity: 1; filter: blur(0); }
+}
+
+/* --- RESTAURANT CARD ENHANCEMENTS --- */
+.restaurant-card:hover .card-image {
+  transform: scale(1.1);
+}
+
+.restaurant-card:hover {
+  border-color: rgba(16, 185, 129, 0.3) !important;
+  box-shadow: 0 40px 80px -20px rgba(0, 0, 0, 0.6), 0 0 20px rgba(16, 185, 129, 0.1) !important;
 }
 
 /* Responsiveness Adjustments */

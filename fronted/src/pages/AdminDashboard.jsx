@@ -2,6 +2,7 @@
 import { useState, useEffect } from 'react'
 import axios from 'axios'
 import { Plus, Trash2, Edit2, Save, X } from 'lucide-react'
+import { staticRestaurants, staticCategories } from '../data/staticData'
 
 const API_URL = import.meta.env.VITE_API_URL;
 
@@ -27,8 +28,10 @@ const AdminDashboard = () => {
       setRestaurants(resRes.data)
       setCategories(catRes.data)
     } catch (error) {
-      console.error('Error fetching data:', error)
-      setError('Error al conectar con la base de datos. Los cambios no se guardarán.')
+      console.error('Error fetching data, usando datos estáticos:', error)
+      setError('Error al conectar con la base de datos. Mostrando inventario de prueba.')
+      setRestaurants(staticRestaurants)
+      setCategories(staticCategories)
     } finally {
       setLoading(false)
     }
@@ -37,33 +40,43 @@ const AdminDashboard = () => {
   // Controlador para procesar la creación de un nuevo restaurante
   const handleAddRestaurant = async (e) => {
     e.preventDefault()
+    setError(null)
     try {
       await axios.post(`${API_URL}/restaurants`, newRes)
       setNewRes({ restaurante: '', barrio: '' })
       fetchData()
     } catch (error) {
       console.error('Error adding restaurant:', error)
+      setError('No se pudo añadir el restaurante. El servidor no responde.')
+      // Autolimpiar el error tras 5 segundos
+      setTimeout(() => setError(null), 5000)
     }
   }
 
   // Elimina un restaurante previa confirmación del usuario
   const handleDeleteRestaurant = async (id) => {
     if (!window.confirm('¿Estás seguro de que quieres eliminar este restaurante?')) return
+    setError(null)
     try {
       await axios.delete(`${API_URL}/restaurants/${id}`)
       fetchData()
     } catch (error) {
       console.error('Error deleting restaurant:', error)
+      setError('No se puede eliminar en modo offline.')
+      setTimeout(() => setError(null), 5000)
     }
   }
 
   const handleUpdateRestaurant = async () => {
+    setError(null)
     try {
       await axios.put(`${API_URL}/restaurants/${editingRes.restauranteID}`, editingRes)
       setEditingRes(null)
       fetchData()
     } catch (error) {
       console.error('Error updating restaurant:', error)
+      setError('No se pueden guardar los cambios en modo offline.')
+      setTimeout(() => setError(null), 5000)
     }
   }
 
