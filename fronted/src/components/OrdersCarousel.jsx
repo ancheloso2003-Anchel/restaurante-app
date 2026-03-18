@@ -82,7 +82,9 @@ const OrdersCarousel = () => {
 
   const currentOrder = orders[currentIndex]
   const currentDetails = details[currentOrder.pedidoID] || []
-  const total = currentDetails.reduce((acc, item) => acc + (item.precio * item.cantidad), 0)
+  const total = currentDetails.length > 0 
+    ? currentDetails.reduce((acc, item) => acc + (item.precio * item.cantidad), 0)
+    : (currentOrder.total || 0)
 
   return (
     // Estructura del carrusel con diseño de tarjeta de cristal para cada pedido

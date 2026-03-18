@@ -116,7 +116,7 @@ const Orders = () => {
               >
                 <img src={order.imagen} alt="Resumen pedido" className="order-card-image" />
                 
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '2rem', flex: 1, alignItems: 'center' }}>
+                <div style={{ display: 'grid', gridTemplateColumns: '1.5fr 1.5fr 1.2fr 1fr', gap: '2rem', flex: 1, alignItems: 'center' }}>
                   <div>
                     <div style={{ fontSize: '0.75rem', color: '#94a3b8', display: 'flex', alignItems: 'center', gap: '4px', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '4px' }}>
                       <User size={12} /> Cliente
@@ -135,6 +135,14 @@ const Orders = () => {
                       <Calendar size={12} /> Fecha
                     </div>
                     <div style={{ fontWeight: '600', fontSize: '1.1rem' }}>{new Date(order.fecha).toLocaleDateString()}</div>
+                  </div>
+                  <div>
+                    <div style={{ fontSize: '0.75rem', color: '#94a3b8', display: 'flex', alignItems: 'center', gap: '4px', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '4px' }}>
+                      <ShoppingBag size={12} /> Importe
+                    </div>
+                    <div style={{ fontWeight: '800', fontSize: '1.4rem', color: 'var(--primary)' }}>
+                      {(order.total || 0).toFixed(2)}€
+                    </div>
                   </div>
                 </div>
                 <div style={{ color: '#94a3b8', background: 'rgba(255,255,255,0.05)', padding: '10px', borderRadius: '12px' }}>
@@ -200,7 +208,7 @@ const Orders = () => {
                           <div style={{ color: '#fff', fontSize: '0.8rem', marginTop: '4px' }}>Incluye IVA y gastos de gestión</div>
                         </div>
                         <span style={{ fontSize: '2.5rem', fontWeight: '900', color: 'var(--primary)', filter: 'drop-shadow(0 0 10px rgba(16, 185, 129, 0.3))' }}>
-                          {orderDetails[order.pedidoID].reduce((acc, item) => acc + (item.precio * item.cantidad), 0).toFixed(2)}€
+                          {(orderDetails[order.pedidoID]?.reduce((acc, item) => acc + (item.precio * item.cantidad), 0) || order.total || 0).toFixed(2)}€
                         </span>
                       </div>
                     </div>

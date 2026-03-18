@@ -83,10 +83,11 @@ app.get('/customers', (req, res) => {
   })
 })
 
-// Get all orders
+// Get all orders with total price calculation
 app.get('/orders', (req, res) => {
   const query = `
-    SELECT p.*, c.nombre, c.apellido1, r.restaurante 
+    SELECT p.*, c.nombre, c.apellido1, r.restaurante,
+    (SELECT SUM(pp.cantidad * pl.precio) FROM platospedidos pp JOIN platos pl ON pp.platoID = pl.platoID WHERE pp.pedidoID = p.pedidoID) as total
     FROM pedidos p
     JOIN clientes c ON p.clienteID = c.clienteID
     JOIN restaurantes r ON p.restauranteID = r.restauranteID
